@@ -11,7 +11,7 @@ let socket = null;
 // ========================
 const handleUnauthorized = () => {
   cookies.remove("token", { path: "/" });
-  cookies.remove("userDetails", { path: "/" });
+  cookies.remove("userDetails", { path: "/" }); 
 
   if (window.location.pathname !== "/login") {
     // Optionally redirect:
