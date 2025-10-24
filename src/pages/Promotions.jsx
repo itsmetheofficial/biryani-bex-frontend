@@ -88,6 +88,9 @@ export default function Promotions() {
   return (
     <div className="promotionPage">
         <div className="pageHeader">
+            <button onClick={()=>navigate(-1)} className="headerPrevButton">
+                <img src="/images/leftArrowFilled.svg" alt=""/>
+            </button>
             <img src="/images/promotionIcon.svg" alt="" width={50} />
             <span>Promotions</span>
         </div>
@@ -193,8 +196,8 @@ export default function Promotions() {
                         <div className="polLinkItem">
                             <p>Copy link and invite your friend</p>
                             <div className='pliButton'>
-                                <span>{window.location.origin}</span>
-                                <button onClick={()=>copyToClipboard(window.location.origin)}>
+                            <span>{window.location.origin+"/sign-up?referralCode="+cookies?.userDetails?.referralCode}</span>
+                                <button onClick={()=>copyToClipboard(window.location.origin+"/sign-up?referralCode="+cookies?.userDetails?.referralCode)}>
                                     <img src="/images/copyIcon.png" alt="" />
                                 </button>
                             </div>

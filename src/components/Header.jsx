@@ -6,7 +6,7 @@ import MyAccount from "../pages/MyAccount";
 import { SocketContext } from "../App";
 import { BASE_URL } from "../api/apiConfig";
 
-const Header = ({ setIsChatOpen }) => {
+const Header = ({ setIsChatOpen,toggleMenu }) => {
   const navigate = useNavigate();
   const socket = useContext(SocketContext);
   const location = useLocation();
@@ -72,6 +72,9 @@ const Header = ({ setIsChatOpen }) => {
     <>
       <header className="mainHeader">
         <div className="mhLeft">
+          <button onClick={toggleMenu} className="humburger">
+            <img src="/images/humburgerSign.svg" alt="Menu Icon" width={35} />
+          </button>
           <Link to="/">
             <img src="/images/siteLogo.png" alt="Site Logo" width={170} />
           </Link>
@@ -99,8 +102,8 @@ const Header = ({ setIsChatOpen }) => {
               <div className="mhpIcon">
                 <img src={userDetails?.profileImage?.length ? `${BASE_URL}${userDetails?.profileImage}`:"/images/profileIocn.png"} alt="Profile Icon" />
               </div>
-              {/* ✅ dynamic username */}
-              <div className="mhpText">{userDetails?.userName || "Guest"}</div>
+              {/* ✅ dynamic name */}
+              <div className="mhpText">{userDetails?.name || "Guest"}</div>
               <div className="mhpRight">
                 <div className="whiteBorderOuter">
                   <button
@@ -114,14 +117,14 @@ const Header = ({ setIsChatOpen }) => {
             </div>
           </div>
           <div className="mhNavigation">
-            <div className="mhnItem" onClick={showModal}>
+            {/* <div className="mhnItem" onClick={showModal}>
               <div className="mhnIconOuter">
                 <div className="mhnIcon">
                   <img src="/images/settingIcon.png" alt="" />
                 </div>
               </div>
               <div className="mhnText">Settings</div>
-            </div>
+            </div> */}
             <div
               className={`mhnItem ${
                 location.pathname === "/notifications" ? "active" : ""
@@ -141,7 +144,7 @@ const Header = ({ setIsChatOpen }) => {
               </div>
               <div className="mhnText">Notification</div>
             </div>
-            <div className="mhnItem">
+            {/* <div className="mhnItem">
               <div
                 className="mhnIconOuter"
                 onClick={() => setIsChatOpen((prev) => !prev)}
@@ -151,7 +154,7 @@ const Header = ({ setIsChatOpen }) => {
                 </div>
               </div>
               <div className="mhnText">Support</div>
-            </div>
+            </div> */}
           </div>
         </div>
       </header>

@@ -132,7 +132,7 @@ export default function UsdtDeposit() {
       <div className="auHeaderOuter">
         <div className="auHeader">
           <span>USDT Deposit</span>
-          <button onClick={() => navigate('/deposit')}>
+          <button onClick={() => navigate(-1)}>
             <img src="/images/closeModalIcon.png" alt="" />
           </button>
         </div>
@@ -172,13 +172,19 @@ export default function UsdtDeposit() {
                   </div>
                 </div>
                 <div className="submitProof">
-                  <p>Submit Payment Proof</p>
+                  <p>Enter UTR Number</p>
                   <div className="spContainer">
                     <input
                       type="text"
-                      placeholder="Please Enter Transaction ID Here"
+                      placeholder="Please Enter UTR Number Here"
                       value={formData.transactionId}
-                      onChange={(e) => setFormData({ ...formData, transactionId: e.target.value })}
+                      onChange={(e) => e.target?.value?.includes(" ") ? null : setFormData({ ...formData, transactionId: e.target.value })}
+                      maxLength={12}
+                      onKeyDown={(e) => {
+                        if (!/[0-9]/.test(e.key) && e.key !== 'Backspace' && e.key !== 'Delete') {
+                          e.preventDefault();
+                        }
+                      }}
                     />
 
                     <div>
@@ -211,7 +217,7 @@ export default function UsdtDeposit() {
                 </div>
               </div>
             </div>
-            <div className="ubiSideButtons">
+            {/* <div className="ubiSideButtons">
               <div className="mwrBottom mbButtons">
                 <button>
                   <img src="/images/videoPauseIcon.png" alt="" />
@@ -222,7 +228,7 @@ export default function UsdtDeposit() {
                   <span>Deposit History</span>
                 </button>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

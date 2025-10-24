@@ -22,6 +22,7 @@ export default function MyWallet() {
 
     useEffect(()=>{
         fetchTransactions();
+        _refreshBalance();
     },[])
 
     const handleTransferBonus = () => {
@@ -77,6 +78,9 @@ export default function MyWallet() {
     return (
         <div className="myWalletPage">
             <div className="pageHeader">
+                <button onClick={()=>navigate(-1)} className="headerPrevButton">
+                    <img src="/images/leftArrowFilled.svg" alt=""/>
+                </button>
                 <img src="/images/walletHeaderIcon.svg" alt="" width={42} />
                 <span>Wallet</span>
             </div>
@@ -134,12 +138,12 @@ export default function MyWallet() {
                             <p>If you want to withdraw this bonus please read the rules bonus amount</p>
                         </div>
                         <div className="mwlButtons">
-                            <button onClick={handleTransferBonus}>
+                            {/* <button onClick={handleTransferBonus}>
                                 <span>
                                     <img src="/images/transferIcon.svg" alt="" />
                                     Transfer to Main Wallet
                                 </span>
-                            </button>
+                            </button> */}
                             <button className='mwlRulesButton' onClick={() => navigate("/rules")}>Read Rules</button>
                         </div>
                     </div>
@@ -149,7 +153,7 @@ export default function MyWallet() {
                     <div className="mwrTop mbButtons">
                         <button onClick={() => navigate("/add-account-details")}>
                             <img src="/images/addBankIcon.svg" alt="" />
-                            <span>Add Bank Account</span>
+                            <span>Add Bank/UPI</span>
                         </button>
                     </div>
                     <div className="mwrBottom mbButtons">

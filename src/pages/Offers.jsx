@@ -6,6 +6,9 @@ export default function Offers() {
   return (
     <div className="offersPage">
         <div className="pageHeader">
+            <button onClick={()=>navigate(-1)} className="headerPrevButton">
+                <img src="/images/leftArrowFilled.svg" alt=""/>
+            </button>
             <img src="/images/OffersPageIcon.svg" alt="" width={40} />
             <span>Offers</span>
         </div>
@@ -24,11 +27,11 @@ export default function Offers() {
                 <h4>Salary <br />
                 System</h4>
             </div>
-            <div className="opOfferItem" onClick={()=>navigate("/daily-salary-system")}>
+            {/* <div className="opOfferItem" onClick={()=>navigate("/daily-salary-system")}>
                 <img src="/images/Offer4.png" alt="" />
                 <h4>3 level <br />
                 income</h4>
-            </div>
+            </div> */}
         </div>
     </div>
   )

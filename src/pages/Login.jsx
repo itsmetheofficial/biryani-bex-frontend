@@ -37,6 +37,9 @@ export default function Login() {
 
   const handleChange = (e) => {
     const { id, value } = e.target;
+     if (value.includes(" ")) {
+            return;
+      }
     setFormData((prev) => ({ ...prev, [id]: value }));
   };
 
@@ -205,7 +208,7 @@ export default function Login() {
           {/* Right logo */}
           <div className="plRight">
             <div className="plrightLogo">
-              <img src="/images/siteLogo.svg" alt="Logo" />
+              <img src="/images/siteLogo.png" alt="Logo" />
             </div>
           </div>
         </div>
@@ -249,7 +252,7 @@ export default function Login() {
                   type="text"
                   placeholder="Email / Mobile"
                   value={resetInput}
-                  onChange={(e) => setResetInput(e.target.value)}
+                  onChange={(e) => e.target.value?.includes(" ") ? null : setResetInput(e.target.value)}
                 />
               </div>
               <button
@@ -272,7 +275,7 @@ export default function Login() {
                     type="text"
                     placeholder="Enter OTP"
                     value={otp}
-                    onChange={(e) => setOtp(e.target.value)}
+                    onChange={(e) => e.target.value?.includes(" ") ? null : setOtp(e.target.value)}
                   />
                 </div>
                 <div className="lplFormItem">
@@ -280,7 +283,7 @@ export default function Login() {
                     type="password"
                     placeholder="New Password"
                     value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
+                    onChange={(e) => e.target.value?.includes(" ") ? null : setNewPassword(e.target.value)}
                   />
                 </div>
                 <div className="lplFormItem">
@@ -288,7 +291,7 @@ export default function Login() {
                     type="password"
                     placeholder="Confirm Password"
                     value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    onChange={(e) => e.target.value?.includes(" ") ? null : setConfirmPassword(e.target.value)}
                   />
                 </div>
                 <button

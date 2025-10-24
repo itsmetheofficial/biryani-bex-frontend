@@ -28,6 +28,7 @@ export default function DepositPage() {
     const [usdtList,setusdtList] = useState([]);
     const [selectedUpi, setselectedUpi] = useState(null);
     const [selectedUsdt, setselectedUsdt] = useState(null);
+    const [minimumDepositAmount,setMinimumDepositAmount] = useState(100);
     const [loading,setLoading] = useState({
         tableLoading:false,
         rulesLoading:false,
@@ -55,14 +56,19 @@ export default function DepositPage() {
         if(paymentType?.length>0 && depositRules){
             if(paymentType==="payFromUPI"){
                 setpaymentRulesToShow(depositRules?.manualDepositRules);
+                setdepositAmount(depositRules?.depositMinimumAmount?.payFromUpi);
+                setMinimumDepositAmount(depositRules?.depositMinimumAmount?.payFromUpi);
             } else if(paymentType==="upi"){
                 setpaymentRulesToShow(depositRules?.payFromUpiDepositRules)
+                setdepositAmount(depositRules?.depositMinimumAmount?.manualUpi);
+                setMinimumDepositAmount(depositRules?.depositMinimumAmount?.manualUpi);
                 if(upiList?.length===0){
                     fetchUPIList(cookies?.token)
                 }
-            }
-            if(paymentType==="usdt"){
+            } else if(paymentType==="usdt"){
                 setpaymentRulesToShow(depositRules?.usdtDepositRules)
+                setdepositAmount(depositRules?.depositMinimumAmount?.usdt);
+                setMinimumDepositAmount(depositRules?.depositMinimumAmount?.usdt);
                 if(usdtList?.length===0){
                     fetchUSDTList(cookies?.token)
                 }
@@ -85,7 +91,7 @@ export default function DepositPage() {
         try {
         setLoading((prev)=>({...prev,tableLoading:true}))
 
-        // const response = await callGetAPI(API_ENDPOINTS.GET_ALL_TRANSACTIONS, cookies.token,{page:1,limit:1000,transactionType:"Deposite"});
+        // const response = await callGetAPI(API_ENDPOINTS.GET_ALL_TRANSACTIONS, cookies.token,{page:1,limit:1000,transactionType:"Deposit"});
         const response = await callGetAPI(API_ENDPOINTS.GET_ALL_TRANSACTIONS, token,{page:1,limit:1000,transactionType:"Bonus"});
 
         if (response?.success) {
@@ -107,6 +113,9 @@ export default function DepositPage() {
             const res = await callGetAPI(API_ENDPOINTS.GET_UPI_LIST,token);
             if(res?.success){
                 setupiList(res?.upiList)
+                if(res?.upiList?.length===1){
+                    setselectedUpi(res?.upiList[0]?.upiId)
+                }
             }else{
                 setupiList([])
             }
@@ -124,6 +133,9 @@ export default function DepositPage() {
             const res = await callGetAPI(API_ENDPOINTS.GET_USDT_WALLET_LIST,token);
             if(res?.success){
                 setusdtList(res?.usdtWalletList)
+                if(res?.usdtWalletList?.length===1){
+                    setselectedUsdt(res?.usdtWalletList[0]?._id)
+                }
             }else{
                 setusdtList([])
             }
@@ -186,17 +198,19 @@ export default function DepositPage() {
                     }
                     let res = await callPostAPI(API_ENDPOINTS.PAY_FROM_UPI, payload,cookies?.token);
     
-                    if(res?.success){
-                        let alertData = {
-                            message: res?.data?.message || "Deposit Successful",
-                            amount:depositAmount,
-                            page:"Deposit"
-                        }
-                        setDepositeAlertData(alertData);
-                        setDepositSuccessVisible(true)
-                        setTimeout(() => {
-                            setDepositSuccessVisible(false)
-                        }, 3000);                    
+                    if(res?.data?.data?.paymentLink){
+                        // navigate(res?.data?.paymentLink);
+                        window.location = res?.data?.data?.paymentLink
+                        // let alertData = {
+                        //     message: res?.data?.message || "Deposit Successful",
+                        //     amount:depositAmount,
+                        //     page:"Deposit"
+                        // }
+                        // setDepositeAlertData(alertData);
+                        // setDepositSuccessVisible(true)
+                        // setTimeout(() => {
+                        //     setDepositSuccessVisible(false)
+                        // }, 3000);                    
                     }else{
                         message.error(res?.message || "Failed to deposit")
                     }
@@ -240,7 +254,7 @@ export default function DepositPage() {
                 <div className="auHeaderOuter">
                     <div className="auHeader">
                         <span>Deposit</span>
-                        <button onClick={() =>  navigate("/")}>
+                        <button onClick={() =>  navigate(-1)}>
                             <img src="/images/closeModalIcon.png" alt="" />
                         </button>
                     </div>
@@ -339,7 +353,7 @@ export default function DepositPage() {
                                 }
                                 <label style={{color:"#fff"}}>Select UPI Account</label>
                                 <Select style={{width:"100%",color:"#fff"}} placeholder="Select UPI" className='custom-white-select'
-                                    onChange={(value)=>setselectedUpi(value)}>
+                                    onChange={(value)=>setselectedUpi(value)} value={selectedUpi}>
                                     <Select.Option value="">Select UPI</Select.Option>
                                     {
                                         upiList?.map((item,index)=>{
@@ -374,7 +388,7 @@ export default function DepositPage() {
                                 }
                                  <label style={{color:"#fff"}}>Select USDT Account</label>
                                 <Select style={{width:"100%",color:"#fff"}} placeholder="Select USDT" className='custom-white-select'
-                                    onChange={(value)=>setselectedUsdt(value)}>
+                                    onChange={(value)=>setselectedUsdt(value)} value={selectedUsdt}>
                                     <Select.Option value="">Select USDT</Select.Option>
                                     {
                                         usdtList?.map((item,index)=>{
@@ -405,7 +419,7 @@ export default function DepositPage() {
 
                         </div>
                         <div className="datButtons">
-                            <button onClick={()=>_changeDepostAmount(100)}> <span className={`datButtonInner ${depositAmount===100 ?"active":""}`} >{paymentType==="usdt"? "$ 1":"₹ 100"}</span></button>
+                            <button onClick={()=>_changeDepostAmount(minimumDepositAmount)}> <span className={`datButtonInner ${depositAmount===minimumDepositAmount ?"active":""}`} >{paymentType==="usdt"? "$ 1":"₹ "+minimumDepositAmount}</span></button>
                             <button onClick={()=>_changeDepostAmount(200)}> <span className={`datButtonInner ${depositAmount===200 ?"active":""}`} >{paymentType==="usdt"?"$ 2":"₹ 200"}</span></button>
                             <button onClick={()=>_changeDepostAmount(400)}> <span className={`datButtonInner ${depositAmount===400 ?"active":""}`} >{paymentType==="usdt"?"$ 4":"₹ 400"}</span></button>
                             <button onClick={()=>_changeDepostAmount(600)}> <span className={`datButtonInner ${depositAmount===600 ?"active":""}`} >{paymentType==="usdt"?"$ 6":"₹ 600"}</span></button>
@@ -493,14 +507,14 @@ export default function DepositPage() {
                     <div className="dpITable">
                         <div className="mwPreTableHeader">
                             <h4>Deposit History</h4>
-                            <div className="mbButtons">
+                            {/* <div className="mbButtons">
                                 <button onClick={()=>navigate("/deposit-history")}>
                                     <span>
                                         View All Transaction 
                                     </span>
                                     <img src="/images/Polygon 2.png" alt="" />
                                 </button>
-                            </div>
+                            </div> */}
                         </div>
                         <div className="mwTable">
                             <div className="gsTable">

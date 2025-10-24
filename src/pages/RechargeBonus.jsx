@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { useCookies } from 'react-cookie';
 import { API_ENDPOINTS } from '../api/apiConfig';
 import { callGetAPI } from '../api/apiHelper';
+import { useNavigate } from 'react-router-dom';
 
 export default function RechargeBonus() {
+    const navigate = useNavigate();
     const [cookies,setCookies] = useCookies();
     const [rechargeBonusData,setRechargeBonusData] = useState([]);
     const [loading,setLoading] = useState(false);
@@ -27,6 +29,9 @@ export default function RechargeBonus() {
   return (
     <div className="rechargeBonusPage">
         <div className="pageHeader">
+            <button onClick={()=>navigate(-1)} className="headerPrevButton">
+                <img src="/images/leftArrowFilled.svg" alt=""/>
+            </button>
             <img src="/images/OffersPageIcon.svg" alt="" width={40} />
             <span>Recharge Bonus</span>
         </div>

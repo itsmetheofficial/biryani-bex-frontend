@@ -20,9 +20,10 @@ export default function MyAccount({ open, setOpen }) {
   const [messageText, setMessageText] = useState("");
   const [loading, setLoading] = useState(false);
   const [logoutLoading, setLogoutLoading] = useState(false);
+  const [showLogoutConfirmationModal, setShowLogoutConfirmationModal] = useState(false);
 
   const [userDetails, setUserDetails] = useState({
-    userName: "",
+    name: "",
     email: "",
     mobile: "",
     balance: 0,
@@ -55,7 +56,7 @@ export default function MyAccount({ open, setOpen }) {
   };
 
   const validateUserData = () => {
-    if (!userDetails.userName?.trim()) {
+    if (!userDetails.name?.trim()) {
       message.error("Name cannot be empty");
       return false;
     }
@@ -82,7 +83,7 @@ export default function MyAccount({ open, setOpen }) {
       }
 
       const formData = new FormData();
-      formData.append("userName", userDetails.userName.trim());
+      formData.append("name", userDetails.name.trim());
       formData.append("email", userDetails.email.trim());
       formData.append("mobile", userDetails.mobile.trim());
 
@@ -111,16 +112,18 @@ export default function MyAccount({ open, setOpen }) {
       setLoading(false);
     }
   };
-
-  const handleLogout = () => {
+  
+  const _logout=()=>{
     setLogoutLoading(true);
+    setShowLogoutConfirmationModal(false);
     setTimeout(() => {
       removeCookie("token", { path: "/" });
       removeCookie("userDetails", { path: "/" });
       localStorage.clear();
       navigate("/login");
     }, 500);
-  };
+    
+  }
 
   return (
     <>
@@ -181,9 +184,10 @@ export default function MyAccount({ open, setOpen }) {
                   <input
                     ref={profileNameRef}
                     type="text"
-                    value={userDetails.userName || ""}
+                    value={userDetails.name || ""}
                     onChange={(e) =>
-                      setUserDetails({ ...userDetails, userName: e.target.value })
+                      e.target.value?.includes(" ")?null:
+                      setUserDetails({ ...userDetails, name: e.target.value })
                     }
                   />
                   <button onClick={() => profileNameRef.current.focus()}>
@@ -241,6 +245,7 @@ export default function MyAccount({ open, setOpen }) {
                       type="email"
                       value={userDetails.email || ""}
                       onChange={(e) =>
+                        e.target.value?.includes(" ")?null:
                         setUserDetails({ ...userDetails, email: e.target.value })
                       }
                     />
@@ -278,7 +283,7 @@ export default function MyAccount({ open, setOpen }) {
                   {!loading && <img src="/images/rightArrowWhite.svg" alt="" />}
                 </button>
                 <button
-                  onClick={handleLogout}
+                  onClick={()=>setShowLogoutConfirmationModal(true)}
                   className="marLogout"
                   disabled={logoutLoading}
                 >
@@ -307,6 +312,22 @@ export default function MyAccount({ open, setOpen }) {
           messageText={messageText}
         />
       )}
+
+      {
+        showLogoutConfirmationModal && (
+           <Modal
+            title="Confirm Logout"
+            open={showLogoutConfirmationModal}
+            onOk={_logout}   // Triggered when the user clicks "Yes"
+            onCancel={()=>setShowLogoutConfirmationModal(false)}  // Triggered when the user clicks "No" or closes the modal
+            okText="Yes"
+            cancelText="No"
+            className=" myAccountLogoutModal"
+          >
+            <p>Are you sure you want to log out?</p>
+          </Modal>
+        )
+      }
     </>
   );
 }

@@ -8,7 +8,7 @@ export default function PrivacyPolicy({allSettings}) {
         <div className="auHeaderOuter">
             <div className="auHeader">
                 <span>Privacy & Policy</span>
-                <button onClick={() =>  navigate("/")}>
+                <button onClick={() =>  navigate(-1)}>
                     <img src="/images/closeModalIcon.png" alt="" />
                 </button>
             </div>

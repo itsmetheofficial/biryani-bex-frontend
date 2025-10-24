@@ -9,7 +9,7 @@ export default function PasswordReset() {
         <div className="wrapper">
             <div className="loginPageInner">
                 <div className="signUplogo">
-                    <img src="/images/siteLogo.svg" alt="" />
+                    <img src="/images/siteLogo.png" alt="" />
                 </div>
                 <div className="lpLeft lpLeftTop">
                     <h4>Password Reset</h4>

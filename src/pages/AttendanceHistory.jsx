@@ -4,9 +4,11 @@ import { API_ENDPOINTS } from "../api/apiConfig";
 import { useEffect, useState } from "react";
 import { message, Spin } from "antd";
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
 
 export default function AttendanceHistory() {
 
+    const navigate = useNavigate();
     const [cookies,setCookies] = useCookies();
     const [loading,setLoading] = useState(false);
     const [attendanceHistory,setAttendanceHistory] = useState([]);
@@ -40,6 +42,9 @@ export default function AttendanceHistory() {
   return (
     <div className="giftsPage">
         <div className="pageHeader">
+            <button onClick={()=>navigate(-1)} className="headerPrevButton">
+                <img src="/images/leftArrowFilled.svg" alt=""/>
+            </button>
             <img src="/images/Daily-Attendance.png" alt="" width={50} />
             <span>Daily Attendance</span>
         </div>

@@ -4,11 +4,13 @@ import { Cookies } from "react-cookie";
 import { callGetAPI } from "../api/apiHelper";
 import { API_ENDPOINTS } from "../api/apiConfig";
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
 
 const { Option } = Select;
 const cookies = new Cookies();
 
 export default function Mybets() {
+    const navigate = useNavigate();
     const [filterData, setFilterData] = useState({
         gameType: "",
         status: "", // win | lose | all
@@ -112,6 +114,9 @@ export default function Mybets() {
     return (
         <div className="myBetsPage">
             <div className="pageHeader">
+                <button onClick={()=>navigate(-1)} className="headerPrevButton">
+                    <img src="/images/leftArrowFilled.svg" alt=""/>
+                </button>
                 <img src="/images/myBetsIcon.svg" alt="" width={40} />
                 <span>Bet History</span>
             </div>

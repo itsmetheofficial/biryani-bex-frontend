@@ -25,6 +25,10 @@ export default function AddBankAccount() {
     const userId = cookies?.userDetails?.userId;
 
     const handleChange = (e) => {
+        if(e.target.value.includes(" ") && e.target?.id !== "bankName" && e.target?.id !== "name") {
+            return;
+        }
+        
         setFormData({
             ...(formData || {}),
             [e.target.name]: e.target.value
@@ -53,6 +57,8 @@ export default function AddBankAccount() {
 
     const handleSubmit = async () => {
         const { name, bankName, accountNumber, ifsc, phone, mail } = formData;
+
+       
 
         if (!name?.trim()) return message.error('Please enter a valid Recipient’s Name');
         if (!bankName?.trim()) return message.error('Please enter a valid Bank Name');
@@ -115,7 +121,7 @@ export default function AddBankAccount() {
             <div className="auHeaderOuter">
                 <div className="auHeader">
                     <span>Add Bank Account</span>
-                   <button onClick={() => navigate("/add-account-details")}>
+                   <button onClick={() => navigate(-1)}>
                         <img src="/images/closeModalIcon.png" alt="" />
                     </button>
                 </div>
@@ -134,9 +140,9 @@ export default function AddBankAccount() {
                             :null
                     }
                     <div className="admFormItem">
-                        <label htmlFor="upiName">Full Recipient’s Name</label>
+                        <label htmlFor="name">Full Recipient’s Name</label>
                         <input
-                            id='upiName'
+                            id='name'
                             name='name'
                             type="text"
                             placeholder='Please Enter Your Name'
@@ -177,6 +183,7 @@ export default function AddBankAccount() {
                             maxLength={11}
                             value={formData?.ifsc?.toUpperCase() || ""}
                             onChange={(e) => {
+                                if (e.target.value.length > 11 || e.target.value?.includes(" ")) return
                                 setFormData(prev => ({
                                     ...prev,
                                     ifsc: e.target.value.toUpperCase()
@@ -214,14 +221,14 @@ export default function AddBankAccount() {
                     </div>
                 </div>
             </div>
-            <div className="ubiSideButtons">
+            {/* <div className="ubiSideButtons">
                 <div className="mwrBottom mbButtons">
                     <button>
                         <img src="/images/questionmarkIcon.png" alt="" style={{ width: "25px" }} />
                         <span>How to add Account</span>
                     </button>
                 </div>
-            </div>
+            </div> */}
 
             {showSuccessModalVisible &&
                 <SuccessModal

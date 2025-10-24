@@ -3,8 +3,10 @@ import { useCookies } from 'react-cookie';
 import { callGetAPI } from '../api/apiHelper';
 import { API_ENDPOINTS } from '../api/apiConfig';
 import { message, Spin } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 export default function DailySalarySystem() {
+    const navigate = useNavigate();
     const [cookies,setCookies] = useCookies();
     const [salarySystemData,setSalarySystemData] = useState([]);
     const [salarySystemRules,setSalarySystemRules] = useState([]);
@@ -39,6 +41,9 @@ export default function DailySalarySystem() {
     return (
         <div className="betCommissionPage">
             <div className="pageHeader">
+                <button onClick={()=>navigate(-1)} className="headerPrevButton">
+                    <img src="/images/leftArrowFilled.svg" alt=""/>
+                </button>
                 <img src="/images/OffersPageIcon.svg" alt="" width={40} />
                 <span>Daily Salary System</span>
             </div>

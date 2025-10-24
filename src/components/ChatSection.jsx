@@ -4,6 +4,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { SocketContext } from "../App";
 import { Cookies } from "react-cookie";
 import moment from "moment";
+import { CloseOutlined } from "@ant-design/icons";
 
 export default function ChatSection({ setIsChatOpen }) {
   const socket = useContext(SocketContext);
@@ -52,9 +53,15 @@ export default function ChatSection({ setIsChatOpen }) {
   useEffect(() => {
     if (!socket) {
       setIsSocketLoading(false);
+      setIsSocketReady(false);
       console.error("WebSocket not connected.");
       return;
+    }else if(socket?.readyState >0){
+      setIsSocketReady(true);
+      setIsSocketLoading(false);
+      
     }
+    console.log("socket : ",socket)
 
     const handleSocketMessage = (event) => {
       try {
@@ -63,9 +70,8 @@ export default function ChatSection({ setIsChatOpen }) {
 
         if (data?.type === "CONNECTED") {
           socket.send(JSON.stringify({ type: "SUBSCRIBE" }));
-        } else if (data?.message === "subscribed successfully.") {
+        } else if (data?.message === "subscribed successfully." || data?.message === "You are already subscribed.") {
           setIsSocketReady(true);
-          setIsSocketLoading(false);
         } else if (data?.type === "ADMIN_RESPONSE") {
           const incomingMessage = {
             id: Date.now(),
@@ -77,12 +83,12 @@ export default function ChatSection({ setIsChatOpen }) {
             }),
           };
           setChatMessages((prev) => [...prev, incomingMessage]);
-          setIsSocketLoading(false);
         }
       } catch (err) {
         console.error("WebSocket message parse error:", err);
         antdMessage.error("Failed to parse WebSocket message.");
-        setIsSocketLoading(false);
+      }finally{
+          setIsSocketLoading(false);
       }
     };
 
@@ -96,11 +102,14 @@ export default function ChatSection({ setIsChatOpen }) {
 
     socket.onclose = () => {
       setIsSocketReady(false);
+      setIsSocketLoading(false);
       antdMessage.error("WebSocket disconnected.");
     };
-
+    
     return () => {
       socket.removeEventListener("message", handleSocketMessage);
+      socket.close();
+      setIsSocketLoading(false);
     };
   }, [socket]);
 
@@ -138,88 +147,97 @@ export default function ChatSection({ setIsChatOpen }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  return (
-    <>
-      <div className="chat-section">
-        <div className="csTopOuter">
-          <div className="csTop">
-            <div className="cstLeft">
-              <div className="supportIcon">
-                <img src="/images/chatIcon2.png" alt="" />
-              </div>
-              <div className="supportName">
-                <p> Aniket Agarwal</p>
-                <small>{isSocketReady ? "Online" : "Not Connected"}</small>
-              </div>
-            </div>
-            <div className="cstRight">
-              <Button type="text" onClick={() => setIsChatOpen(false)}>
-                <img
-                  src="/images/downArrowmultipleColor.png"
-                  alt="Dropdown Arrow"
-                />
-              </Button>
-            </div>
-          </div>
-        </div>
+  //  const _closeChatOnBlur =(e)=>{
+  //        if(window.innerWidth<993){
+  //           if(e.target?.classList?.contains("chatSectionOuter")){
+  //                setIsChatOpen(false)
+  //           }
+  //       }
+  //   }
 
-        <div className="csChatArea">
-          <div className="chatList">
-            {chatMessages.map((msg, index) => (
-              <div
-                key={msg?.id || index}
-                className={`chatItem ${
-                  msg?.sender === "user" ? "myMessage" : "supportMessage"
-                }`}
-              >
-                <div className="ciContent">
-                  <div className="ciText">
-                    <p>{msg?.text || ""}</p>
-                    <span className="ciTime">{msg?.time?.length>0 ?moment().format("HH:mm A"):"--/--"}</span>
-                  </div>
+  return (
+      <div className="chat-section chatSectionOuter">
+        <div className="chat-section">
+          <div className="csTopOuter">
+            <div className="csTop">
+              <div className="cstLeft">
+                <div className="supportIcon">
+                  <img src="/images/chatIcon2.png" alt="" />
+                </div>
+                <div className="supportName">
+                  <p> Aniket Agarwal</p>
+                  <small>{isSocketReady ? "Online" : "Not Connected"}</small>
                 </div>
               </div>
-            ))}
+              <div className="cstRight">
+                <Button type="text" onClick={() => setIsChatOpen(false)}>
+                  {/* <img
+                    src="/images/downArrowmultipleColor.png"
+                    alt="Dropdown Arrow"
+                  /> */}
+                  <CloseOutlined />
+                </Button>
+              </div>
+            </div>
+          </div>
 
-            {isSocketLoading && (
-              <div className="chat-loading">
-                <Spin tip="Connecting..." />
+          <div className="csChatArea">
+            <div className="chatList">
+              {chatMessages.map((msg, index) => (
+                <div
+                  key={msg?.id || index}
+                  className={`chatItem ${
+                    msg?.sender === "user" ? "myMessage" : "supportMessage"
+                  }`}
+                >
+                  <div className="ciContent">
+                    <div className="ciText">
+                      <p>{msg?.text || ""}</p>
+                      <span className="ciTime">{msg?.time?.length>0 ?moment().format("HH:mm A"):"--/--"}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+
+              {isSocketLoading && (
+                <div className="chat-loading">
+                  <Spin tip="Connecting..." />
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="csBottom">
+            <div className="chatContainer">
+              <div className="ccLeft">
+                <textarea
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  placeholder="Write a message..."
+                />
+                <button
+                  ref={emojiButtonRef}
+                  className="emojiButton"
+                  onClick={toggleEmojiPicker}
+                  aria-label="Show Emoji Picker"
+                >
+                  <img src="/images/emojiIcon.png" alt="" />
+                </button>
+              </div>
+              <div className="ccRight">
+                <button className="sendButton" onClick={sendMessage}>
+                  <img src="/images/SendButton.svg" alt="" />
+                </button>
+              </div>
+            </div>
+
+            {showEmojiPicker && (
+              <div ref={emojiPickerRef} className="emoji-tooltip">
+                <EmojiPicker onEmojiClick={onEmojiClick} />
               </div>
             )}
           </div>
         </div>
-
-        <div className="csBottom">
-          <div className="chatContainer">
-            <div className="ccLeft">
-              <textarea
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder="Write a message..."
-              />
-              <button
-                ref={emojiButtonRef}
-                className="emojiButton"
-                onClick={toggleEmojiPicker}
-                aria-label="Show Emoji Picker"
-              >
-                <img src="/images/emojiIcon.png" alt="" />
-              </button>
-            </div>
-            <div className="ccRight">
-              <button className="sendButton" onClick={sendMessage}>
-                <img src="/images/SendButton.svg" alt="" />
-              </button>
-            </div>
-          </div>
-
-          {showEmojiPicker && (
-            <div ref={emojiPickerRef} className="emoji-tooltip">
-              <EmojiPicker onEmojiClick={onEmojiClick} />
-            </div>
-          )}
-        </div>
       </div>
-    </>
   );
 }

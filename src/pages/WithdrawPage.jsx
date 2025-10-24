@@ -3,17 +3,18 @@ import { useNavigate } from 'react-router-dom'
 import DepositSucesssModal from '../components/DepositSucesssModal';
 import DepositeFailedModal from '../components/DepositeFailedModal';
 import VeiwDetailsModal from '../components/VeiwDetailsModal';
-import { callGetAPI, callPostAPI, fetchUserDetailsHelper } from '../api/apiHelper';
+import { callGetAPI, callPostAPI, fetchUserBalanceHelper, fetchUserDetailsHelper } from '../api/apiHelper';
 import { API_ENDPOINTS } from '../api/apiConfig';
 import { useCookies } from 'react-cookie';
 import { Button, message, Modal, Spin } from 'antd';
 import moment from 'moment';  
 import create from '@ant-design/icons/lib/components/IconFont';
+import { PlusOutlined } from '@ant-design/icons';
 
 export default function WithdrawPage() {
     const navigate = useNavigate()
     const [cookies,setCookies] = useCookies();
-    const [paymentType,setpaymentType] = useState("bank");
+    const [paymentType,setpaymentType] = useState("Bank");
     const [withdrawAmout,setwithdrawAmout] = useState(100);
     const [userPassword,setUserPassword] = useState("");
     const [usdtAmount,setUsdtAmount] = useState(1);
@@ -57,7 +58,7 @@ export default function WithdrawPage() {
 
     useEffect(()=>{
         if(paymentType && transationsData?.length>0){
-            let filteredData = transationsData?.filter((t)=>t?.paymentMode===paymentType ||t?.paymentMode==="Bonus")
+            let filteredData = transationsData?.filter((t)=>t?.paymentMode===paymentType)
             setfilteredTransectionlist(filteredData)
         }else{
             setfilteredTransectionlist([])
@@ -68,14 +69,15 @@ export default function WithdrawPage() {
         if(cookies?.token){
             fetchWithdrawalRules(cookies?.token);
             fetchTransactions(cookies?.token);
-            fetchPaymentDetails("bank",cookies?.token);
+            fetchPaymentDetails("Bank",cookies?.token);
             fetchPaymentDetails("usdt",cookies?.token);
+            _refreshBalance();
         }
     },[cookies?.token])
 
     useEffect(()=>{
         if(paymentType?.length>0 && withdrawalRules){
-            if(paymentType==="bank"){
+            if(paymentType==="Bank"){
                 setpaymentRulesToShow(withdrawalRules?.bank)
             } else if(paymentType==="upi"){
                 setpaymentRulesToShow(withdrawalRules?.payFromUpiWithdrawRules)
@@ -91,7 +93,7 @@ export default function WithdrawPage() {
         try{
             let res = await callGetAPI(API_ENDPOINTS?.GET_PAYMENT_DETAILS,token,{userId:cookies?.userDetails?.userId,type});
             if(res?.success){
-                if(type==="bank"){
+                if(type==="Bank"){
                     setBankList(res?.data)
                 } else if(type==="usdt"){
                     setUsdtList(res?.data)
@@ -126,7 +128,7 @@ export default function WithdrawPage() {
         setLoading((prev)=>({...prev,tableLoading:true}))
 
         // const response = await callGetAPI(API_ENDPOINTS.GET_ALL_TRANSACTIONS, token,{page:1,limit:1000,transactionType:"Withdraw"});
-        const response = await callGetAPI(API_ENDPOINTS.GET_ALL_TRANSACTIONS, token,{page:1,limit:1000,transactionType:"Bonus"});
+        const response = await callGetAPI(API_ENDPOINTS.GET_ALL_TRANSACTIONS, token,{page:1,limit:1000,transactionType:"Withdraw"});
 
         if (response?.success) {
             setTransationsData(response?.transactions || []);
@@ -162,17 +164,21 @@ export default function WithdrawPage() {
     }
     
     const _withdrawBalance =()=>{
-        if(paymentType==="bank"){
+        if(paymentType==="Bank"){
             if(withdrawAmout<withdrawalRules?.bankWithdrawSettings?.minimumWithdrawAmount){
                 message.error("Minimum withdraw amount is "+withdrawalRules?.bankWithdrawSettings?.minimumWithdrawAmount)
+                return;
             }else if(withdrawAmout>withdrawalRules?.bankWithdrawSettings?.maximumWithdrawAmount){
                 message.error("Maximum withdraw amount is "+withdrawalRules?.bankWithdrawSettings?.maximumWithdrawAmount)
+                return;
             }
         }else if(paymentType === "usdt"){
             if(withdrawAmout<withdrawalRules?.usdtWithdrawSettings?.minimumWithdrawAmount){
                 message.error("Minimum withdraw amount is "+withdrawalRules?.usdtWithdrawSettings?.minimumWithdrawAmount)
+                return;
             }else if(withdrawAmout>withdrawalRules?.usdtWithdrawSettings?.maximumWithdrawAmount){
                 message.error("Maximum withdraw amount is "+withdrawalRules?.usdtWithdrawSettings?.maximumWithdrawAmount)
+                return;
             }
         }
         createWithdrawRequest()
@@ -208,6 +214,8 @@ export default function WithdrawPage() {
             }else{
                 message.error(res?.message);
             }
+            fetchTransactions(cookies?.token);
+            _refreshBalance();
             setTimeout(() => {
                 setwithdrawAlertData({});
                 setWithdrawSuccessVisible(false)
@@ -271,7 +279,7 @@ export default function WithdrawPage() {
                 <div className="auHeaderOuter">
                     <div className="auHeader">
                         <span>Withdraw</span>
-                        <button onClick={() => navigate("/my-wallet")}>
+                        <button onClick={() => navigate(-1)}>
                             <img src="/images/closeModalIcon.png" alt="" />
                         </button>
                     </div>
@@ -304,8 +312,8 @@ export default function WithdrawPage() {
                             <span>Select Withdraw Method</span>
                         </h4>
                         <div className="dmlist">
-                            <button onClick={()=>_changePaymentType("bank")}>
-                                <div className={`dmItemInner ${paymentType ==="bank"?"active":"" }`}>
+                            <button onClick={()=>_changePaymentType("Bank")}>
+                                <div className={`dmItemInner ${paymentType ==="Bank"?"active":"" }`}>
                                     <img src="/images/Bank.svg" alt="" />
                                     <span>BANK</span>                            
                                 </div>
@@ -326,10 +334,10 @@ export default function WithdrawPage() {
                         </div>
                     </div>
                     {
-                        paymentType==="bank" &&
+                        paymentType==="Bank" &&
                             <div className="withdrawalBankDetails">
                                 <div className="wbdLeft">
-                                    <div className="wbdLeftInner" onClick={()=>selectedBank?._id ?null : setShowSelectBankModalBank(true)}
+                                    <div className="wbdLeftInner" onClick={()=> setShowSelectBankModalBank(true)}
                                         style={{position:"relative"}}>
                                         {
                                             loading?.paymentlistLoading ?
@@ -368,9 +376,10 @@ export default function WithdrawPage() {
                                 </div>
                                 <div className="wdbRight">
                                     <div className="gradientButton">
-                                        <button onClick={()=>setShowSelectBankModalBank(true)}>
-                                            <img src="/images/refreshfilled.svg" alt="" />
-                                            <span>Change <br />Account</span>
+                                        <button  onClick={()=>navigate("/add-bank-account")}>
+                                            {/* <img src="/images/refreshfilled.svg" alt="" /> */}
+                                            <PlusOutlined style={{fontSize:25}} />
+                                            <span>Add  <br />Account</span>
                                         </button>
                                     </div>
                                 </div>
@@ -382,7 +391,7 @@ export default function WithdrawPage() {
                         paymentType==="usdt" &&
                             <div className="withdrawalBankDetails">
                                 <div className="wbdLeft">
-                                    <div className="wbdLeftInner" onClick={()=>selectedUsdt?._id ?null : setShowSelectBankModalUsdt(true)}
+                                    <div className="wbdLeftInner" onClick={()=> setShowSelectBankModalUsdt(true)}
                                         style={{position:"relative"}}>
                                         {
                                             loading?.paymentlistLoading ?
@@ -421,9 +430,10 @@ export default function WithdrawPage() {
                                 </div>
                                 <div className="wdbRight">
                                     <div className="gradientButton">
-                                        <button onClick={()=>setShowSelectBankModalUsdt(true)}>
-                                            <img src="/images/refreshfilled.svg" alt="" />
-                                            <span>Change <br />Account</span>
+                                        <button onClick={()=>navigate("/add-usdt-account")}>
+                                            {/* <img src="/images/refreshfilled.svg" alt="" /> */}
+                                            <PlusOutlined />
+                                            <span>Add USDT <br />Account</span>
                                         </button>
                                     </div>
                                 </div>
@@ -506,7 +516,7 @@ export default function WithdrawPage() {
                         </div>
                         <div className="depositPrice depositPassword">
                             <img src="/images/lockIcon.svg" alt="" />
-                            <input type="password" placeholder='Enter Password' value={userPassword} onChange={(e)=>setUserPassword(e.target.value)} />
+                            <input type="password" placeholder='Enter Password' value={userPassword} onChange={(e)=>e.target.value?.includes(" ") ? null : setUserPassword(e.target.value)} />
                             <button onClick={()=>setUserPassword("")}>
                                 <img src="/images/crosswhite.svg" alt="" />
                             </button>
@@ -540,7 +550,7 @@ export default function WithdrawPage() {
 
                                     paymentRulesToShow?.map((item,index)=>{
 
-                                        if(paymentType==="bank"){
+                                        if(paymentType==="Bank"){
                                             item = item?.replace("{{WITHDRAW_TIMES}}",withdrawalRules?.bankWithdrawSettings?.count)
                                                    .replace("{{MINIMUM_WITHDRAW_AMOUNT}}",withdrawalRules?.bankWithdrawSettings?.minimumWithdrawAmount)
                                                    .replace("{{MAXIMUM_WITHDRAW_AMOUNT}}",withdrawalRules?.bankWithdrawSettings?.maximumWithdrawAmount)
@@ -568,14 +578,14 @@ export default function WithdrawPage() {
                     <div className="dpITable">
                         <div className="mwPreTableHeader">
                             <h4>Withdraw History</h4>
-                            <div className="mbButtons">
+                            {/* <div className="mbButtons">
                                 <button onClick={()=>navigate("/withdraw-history")}>
                                     <span>
                                         View All Transaction 
                                     </span>
                                     <img src="/images/Polygon 2.png" alt="" />
                                 </button>
-                            </div>
+                            </div> */}
                         </div>
                         <div className="mwTable">
                             <div className="gsTable">
@@ -623,10 +633,10 @@ export default function WithdrawPage() {
                                                                     <span>{rowData?.createdAt?.length ? moment(rowData?.createdAt).format("DD-MM-YYYY HH:MM") : "N/A"}</span>
                                                                 </div>
                                                                 <div className="tecTd price depositWithdrwal negativeBalance">
-                                                                    <span>- ₹{rowData?.amount || 0}</span>
+                                                                    <span>- ₹{rowData?.amount>0 ? parseFloat(rowData?.amount)?.toFixed(2): 0}</span>
                                                                 </div>
                                                                 <div className="tecTd balance">
-                                                                    <span>₹{rowData?.remainingBalance || 0}</span>
+                                                                    <span>₹{rowData?.remainingBalance ? parseFloat(rowData?.remainingBalance)?.toFixed(2) : 0}</span>
                                                                 </div>
                                                                 <div className={`tecTd status ${rowData?.status}`}>
                                                                     <span className="tecTdTag">{rowData?.status}</span>
@@ -640,7 +650,11 @@ export default function WithdrawPage() {
                                                             </div>
                                                         </div>
                                                     ))
-                                                    : null
+                                                    :   <div className="tecRow" style={{justifyContent:"center",background:"#26364b",height:100}}>
+                                                        <div className="tecTd attendanceTitle game"style={{justifyContent:"center"}} >
+                                                            No Data Found
+                                                        </div>
+                                                </div>
                                             }
                                         </div>
                                     </div>
@@ -709,7 +723,7 @@ export default function WithdrawPage() {
                                     <div
                                         key={index}
                                         className="bank-item"
-                                        onClick={() => _selectPaymentMethod(bank,"bank")}
+                                        onClick={() => _selectPaymentMethod(bank,"Bank")}
                                     >
                                         {/* <div className="blIcon">
                                             <img src="/images/hdfcWhite.svg" alt="" />
@@ -817,6 +831,40 @@ export default function WithdrawPage() {
                                         Add Usdt Account
                                     </Button>
                                 </div>
+                            }
+                            {
+                                usdtList?.map((usdt, index) => (
+                                    <div
+                                        key={index}
+                                        className="bank-item"
+                                        onClick={() => _selectPaymentMethod(usdt,"usdt")}
+                                    >
+                                        {/* <div className="blIcon">
+                                            <img src="/images/hdfcWhite.svg" alt="" />
+                                        </div> */}
+                                        <div className="bank-details">
+                                            <div className="bank-name">{usdt?.addressAlias}</div>
+                                            <div className="bank-account">{usdt?.usdtAddress}</div>
+                                        </div>
+                                    </div>
+                                    ))
+                            }
+                            {
+                                usdtList?.map((usdt, index) => (
+                                    <div
+                                        key={index}
+                                        className="bank-item"
+                                        onClick={() => _selectPaymentMethod(usdt,"usdt")}
+                                    >
+                                        {/* <div className="blIcon">
+                                            <img src="/images/hdfcWhite.svg" alt="" />
+                                        </div> */}
+                                        <div className="bank-details">
+                                            <div className="bank-name">{usdt?.addressAlias}</div>
+                                            <div className="bank-account">{usdt?.usdtAddress}</div>
+                                        </div>
+                                    </div>
+                                    ))
                             }
                         </div>
                     </div>

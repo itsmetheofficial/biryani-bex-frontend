@@ -6,10 +6,12 @@ import { callGetAPI } from "../api/apiHelper";
 import { API_ENDPOINTS } from "../api/apiConfig";
 import { useCookies } from "react-cookie";
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
 
 const { Option } = Select;
 
 export default function AllTransactions() {
+    const navigate = useNavigate();
     const [cookies] = useCookies(["token"]);
 
     const [transactions, setTransactions] = useState([]);
@@ -81,6 +83,9 @@ export default function AllTransactions() {
     return (
         <div className="alltransactionPage">
             <div className="pageHeader">
+                <button onClick={()=>navigate(-1)} className="headerPrevButton">
+                    <img src="/images/leftArrowFilled.svg" alt=""/>
+                </button>
                 <span>All Transactions</span>
             </div>
 

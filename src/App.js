@@ -1,7 +1,7 @@
 // src/App.js
 import React, { useEffect, useState } from "react";
 import { Layout, Button, message } from "antd";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import "../src/index.css";
 
 import Home from "./pages/Home";
@@ -56,8 +56,18 @@ export const SocketContext = React.createContext(null); // ✅ global socket con
 const { Content } = Layout;
 const cookies = new Cookies();
 
+const PageWrapper = ({ title, children }) => {
+  useEffect(() => {
+    if (title) {
+      document.title = title;
+    }
+  }, [title]);
+
+  return children;
+};
 function App() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(true);
   const [desktopSize, setdeskTopSize] = useState(true);
@@ -96,6 +106,19 @@ function App() {
     }
   };
 
+  useEffect(() => {
+    const token = cookies.get("token");
+
+    // Define routes that require authentication
+    const publicRoutes = ["/login", "/sign-up", "/password-reset", "/splash"];
+
+    const isPublicRoute = publicRoutes.includes(location.pathname);
+
+    if (!token && !isPublicRoute) {
+      navigate("/login", { replace: true });
+    }
+  }, [location.pathname]);
+
   // 🔹 Verify login + fetch user details & balance
   useEffect(() => {
     const initAuth = async () => {
@@ -104,7 +127,7 @@ function App() {
         setLoading(true);
         const userId = await verifyTokenHelper();
 
-        if (!userId && window.location.pathname !== "/login") {
+        if (!userId && window.location.pathname !== "/login" && window.location.pathname !== "/sign-up") {
           navigate("/login");
           return;
         }
@@ -122,7 +145,7 @@ function App() {
           setLoading(false);
 
           // ✅ connect socket after successful login + data fetch
-         const newSocket = connectSocket(token, (data) => {
+          const newSocket = connectSocket(token, (data) => {
             console.log("📨 Received WebSocket message:", data);
             // 👉 Dispatch to Redux, update state, trigger notifications, etc.
           });
@@ -132,7 +155,7 @@ function App() {
           setLoading(false);
         }
       } else {
-        if (window.location.pathname !== "/login") {
+        if (window.location.pathname !== "/login" && window.location.pathname !== "/sign-up") {
           navigate("/login");
         }
         setLoading(false);
@@ -167,25 +190,36 @@ function App() {
   return (
     <SocketContext.Provider value={socket}>
       <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/splash" element={<Splash />} />
-        <Route path="/sign-up" element={<SignUp />} />
-        <Route path="/password-reset" element={<PasswordReset />} />
+        <Route path="/login" element={
+          <PageWrapper title="Login - Biryani Bet" >
+            <Login />
+          </PageWrapper>} />
+        <Route path="/splash" element={
+          <PageWrapper title="Biryani Bet" >
+            <Splash /> 
+          </PageWrapper>} />
+        <Route path="/sign-up" element={
+          <PageWrapper title="Sign Up - Biryani Bet" >
+            <SignUp /> 
+          </PageWrapper>} />
+        <Route path="/password-reset" element={
+          <PageWrapper title="Password Reset - Biryani Bet">
+            <PasswordReset /> 
+          </PageWrapper>} />
         <Route
           path="*"
           element={
             <Layout className="layout">
-              <Header setIsChatOpen={setIsChatOpen} />
+              <Header setIsChatOpen={setIsChatOpen} toggleMenu={toggleMenu} />
               <Layout>
                 <Sidebar collapsed={collapsed} toggleMenu={toggleMenu} />
                 <Layout
-                  className={`layout-content ${collapsed ? "collapsed" : ""} ${
-                    desktopSize
+                  className={`layout-content ${collapsed ? "collapsed" : ""} ${desktopSize
                       ? !isChatOpen
                         ? "contentRight"
                         : "contentRightOpen"
                       : ""
-                  }`}
+                    }`}
                 >
                   {collapsed && (
                     <div className="shtRight shtRightRotate">
@@ -201,73 +235,119 @@ function App() {
 
                   <Content className={`content`}>
                     <Routes>
-                      <Route path="/" element={<Home isChatOpen={isChatOpen} />} />
-                      <Route path="/my-bets" element={<Mybets />} />
-                      <Route path="/game-statics" element={<GameStatics />} />
-                      <Route path="/notifications" element={<Notification />} />
+                      <Route path="/" element={
+                        <PageWrapper title="Home page - Biryani Bet">
+                          <Home isChatOpen={isChatOpen} />
+                        </PageWrapper>} />
+                      <Route path="/my-bets" element={
+                        <PageWrapper title="My bets - Biryani Bet">
+                          <Mybets /> 
+                        </PageWrapper>} />
+                      <Route path="/game-statics" element={
+                        <PageWrapper title="Game statics - Biryani Bet">
+                          <GameStatics />
+                        </PageWrapper>} />
+                      <Route path="/notifications" element={
+                        <PageWrapper title="Notifications - Biryani Bet" >
+                          <Notification /> 
+                        </PageWrapper>} />
                       <Route
                         path="/about"
-                        element={<AboutUs allSettings={allSettings} />}
+                        element={
+                          <PageWrapper title="About Us - Biryani Bet">
+                            <AboutUs allSettings={allSettings} /> 
+                          </PageWrapper>}
                       />
-                      <Route
+                      <Route 
                         path="/privacy-policy"
-                        element={<PrivacyPolicy allSettings={allSettings} />}
+                        element={
+                          <PageWrapper title="Privacy Policy - Biryani Bet">
+                            <PrivacyPolicy allSettings={allSettings} /> 
+                          </PageWrapper>}
                       />
-                      <Route path="/my-wallet" element={<MyWallet />} />
-                      <Route path="/promotions" element={<Promotions />} />
-                      <Route path="/offers" element={<Offers />} />
-                      <Route
+                      <Route path="/my-wallet" element={
+                        <PageWrapper title="My Wallet - Biryani Bet" >
+                          <MyWallet /> 
+                        </PageWrapper>} />
+                      <Route path="/promotions" element={
+                        <PageWrapper title="Promotions - Biryani Bet">
+                          <Promotions /> 
+                        </PageWrapper>} />
+                      <Route path="/offers" element={
+                        <PageWrapper title="Offers - Biryani Bet">
+                          <Offers /> 
+                        </PageWrapper>} />
+                      <Route 
                         path="/daily-attendance"
-                        element={<DailyAttendance />}
+                        element={
+                          <PageWrapper title="Daily Attendance - Biryani Bet" ><DailyAttendance /> </PageWrapper>}
                       />
-                      <Route
+                      <Route 
                         path="/recharge-bonus"
-                        element={<RechargeBonus />}
+                        element={
+                          <PageWrapper title="Recharge Bonus - Biryani Bet"><RechargeBonus /> </PageWrapper>}
                       />
-                      <Route path="/bet-commission" element={<BetCommission />} />
-                      <Route path="/deposit" element={<DepositPage />} />
-                      <Route path="/withdraw" element={<WithdrawPage />} />
+                      <Route path="/bet-commission" element={
+                        <PageWrapper title="Bet Commission - Biryani Bet" ><BetCommission /> </PageWrapper>} />
+                      <Route path="/deposit" element={
+                        <PageWrapper title="Deposit - Biryani Bet" ><DepositPage /> </PageWrapper>} />
+                      <Route path="/withdraw" element={
+                        <PageWrapper title="Withdraw - Biryani Bet" ><WithdrawPage /> </PageWrapper>} />
                       <Route
                         path="/all-transactions"
-                        element={<AllTransactions />}
+                        element={
+                          <PageWrapper title="All Transactions - Biryani Bet" ><AllTransactions /> </PageWrapper>}
                       />
                       <Route
                         path="/deposit-history"
-                        element={<DepositHistory />}
+                        element={
+                          <PageWrapper title="Deposit History - Biryani Bet" ><DepositHistory /> </PageWrapper>}
                       />
                       <Route
                         path="/withdraw-history"
-                        element={<WithdrawHistory />}
+                        element={
+                          <PageWrapper title="Withdraw History - Biryani Bet" ><WithdrawHistory /> </PageWrapper>}
                       />
-                      <Route path="/gifts" element={<Gifts />} />
+                      <Route path="/gifts" element={
+                        <PageWrapper title="Gifts - Biryani Bet" ><Gifts /> </PageWrapper>} />
                       <Route
                         path="/attendance-history"
-                        element={<AttendanceHistory />}
+                        element={
+                          <PageWrapper title="Attendance History - Biryani Bet" ><AttendanceHistory /> </PageWrapper>}
                       />
-                      <Route path="/rules" element={<Rules />} />
+                      <Route path="/rules" element={
+                        <PageWrapper title="Rules - Biryani Bet" ><Rules /> </PageWrapper>} />
                       <Route
                         path="/daily-salary-system"
-                        element={<DailySalarySystem />}
+                        element={
+                          <PageWrapper title="Daily Salary System - Biryani Bet" ><DailySalarySystem /> </PageWrapper>}
                       />
                       <Route
                         path="/subordinate-data"
-                        element={<SubordinateData />}
+                        element={
+                          <PageWrapper title="Subordinate Data - Biryani Bet" ><SubordinateData /> </PageWrapper>}
                       />
                       <Route
                         path="/usdt-deposit"
-                        element={<UsdtDeposit />}
+                        element={
+                          <PageWrapper title="USDT Deposit - Biryani Bet" ><UsdtDeposit /> </PageWrapper>}
                       />
                       <Route
                         path="/upi-deposit"
-                        element={<UPIDeposit />}
+                        element={
+                          <PageWrapper title="UPI Deposit - Biryani Bet" ><UPIDeposit /> </PageWrapper>}
                       />
                       <Route
                         path="/add-account-details"
-                        element={<AddAccountDetails />}
+                        element={
+                          <PageWrapper title="Add Account Details - Biryani Bet" ><AddAccountDetails /> </PageWrapper>}
                       />
-                      <Route path="/add-bank-account" element={<AddBankAccount />} />
-                      <Route path="/add-upi-account" element={<AddUPIAccount />} />
-                      <Route path="/add-usdt-account" element={<AddUSDTAccount />} />
+                      <Route path="/add-bank-account" element={
+                        <PageWrapper title="Add Bank Account - Biryani Bet" ><AddBankAccount /> </PageWrapper>} />
+                      <Route path="/add-upi-account" element={
+                        <PageWrapper title="Add UPI Account - Biryani Bet" ><AddUPIAccount /> </PageWrapper>} />
+                      <Route path="/add-usdt-account" element={
+                        <PageWrapper title="Add USDT Account - Biryani Bet" ><AddUSDTAccount /> </PageWrapper>} />
                     </Routes>
                   </Content>
                 </Layout>

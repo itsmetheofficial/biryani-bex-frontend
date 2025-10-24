@@ -6,10 +6,12 @@ import moment from 'moment';
 import { useCookies } from 'react-cookie';
 import { callGetAPI } from '../api/apiHelper';
 import { API_ENDPOINTS } from '../api/apiConfig';
+import { useNavigate } from 'react-router-dom';
 
 const { Option } = Select;
 
 export default function DepositHistory() {
+    const navigate = useNavigate();
     const [cookies] = useCookies();
     const [depositDetialsModalVisible, setDepositDetialsModalVisible] = useState(false);
     const [selectedDepositEntry, setselectedDepositEntry] = useState(null);
@@ -24,7 +26,7 @@ export default function DepositHistory() {
 
     const [filterData, setFilterData] = useState({
         // transactionType: 'Deposit',
-        transactionType: 'Bonus',
+        transactionType: 'Deposit',
         paymentMode: '',
         status: '',
         fromDate: null,
@@ -93,7 +95,7 @@ export default function DepositHistory() {
     const clearAllFilters = () => {
         setFilterData({
             // transactionType: 'Deposit',
-            transactionType: 'Bonus',
+            transactionType: 'Deposit',
             paymentMode: '',
             status: '',
             fromDate: null,
@@ -106,6 +108,9 @@ export default function DepositHistory() {
     return (
         <div className="alltransactionPage depositHistory">
             <div className="pageHeader">
+                <button onClick={()=>navigate(-1)} className="headerPrevButton">
+                    <img src="/images/leftArrowFilled.svg" alt=""/>
+                </button>
                 <span>Deposit History</span>
             </div>
 

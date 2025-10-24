@@ -3,8 +3,10 @@ import React, { useEffect, useState } from "react"
 import { useCookies } from "react-cookie"
 import { callGetAPI } from "../api/apiHelper"
 import { API_ENDPOINTS } from "../api/apiConfig"
+import { useNavigate } from "react-router-dom"
 
 export default function GameStatics() {
+    const navigate = useNavigate();
     const [cookies] = useCookies()
     const token = cookies?.token
     const userId = cookies?.userDetails?.userId
@@ -44,6 +46,9 @@ export default function GameStatics() {
     return (
         <div className="gameStatics">
             <div className="pageHeader">
+                <button onClick={()=>navigate(-1)} className="headerPrevButton">
+                    <img src="/images/leftArrowFilled.svg" alt=""/>
+                </button>
                 <img src="/images/gamePageHeaderIcon.svg" alt="" width={50} />
                 <span>Game Statistics</span>
             </div>

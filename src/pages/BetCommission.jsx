@@ -3,8 +3,10 @@ import { useCookies } from "react-cookie";
 import { callGetAPI } from "../api/apiHelper";
 import { API_ENDPOINTS } from "../api/apiConfig";
 import { Spin } from "antd";
+import { useNavigate } from "react-router-dom";
 
 export default function BetCommission() {
+    const navigate = useNavigate();
     const [cookies, setCookies] = useCookies();
     const [betCommissionData, setBetCommissionData] = useState([]);
     const [betCommissionRules, setBetCommissionRules] = useState([]);
@@ -36,6 +38,9 @@ export default function BetCommission() {
     return (
         <div className="betCommissionPage">
             <div className="pageHeader">
+                <button onClick={()=>navigate(-1)} className="headerPrevButton">
+                    <img src="/images/leftArrowFilled.svg" alt=""/>
+                </button>
                 <img src="/images/OffersPageIcon.svg" alt="" width={40} />
                 <span>Bet Commission</span>
             </div>
@@ -65,7 +70,7 @@ export default function BetCommission() {
                             betCommissionData?.map((rowData, index) => (
                                 <div className="rtTr" key={rowData?._id || index}>
                                     <div className="rtTd topupValue">{rowData?.level}</div>
-                                    <div className="rtTd reward">₹{rowData?.commission}</div>
+                                    <div className="rtTd reward">{rowData?.commission}%</div>
                                 </div>
                             ))
                         ) : (

@@ -11,7 +11,7 @@ export default function AddAccountDetails() {
         <div className="auHeaderOuter">
             <div className="auHeader">
                 <span>Add Account Details</span>
-                <button onClick={() => navigate("/my-wallet")}>
+                <button onClick={() => navigate(-1)}>
                     <img src="/images/closeModalIcon.png" alt="" />
                 </button>
             </div>
@@ -62,14 +62,14 @@ export default function AddAccountDetails() {
                 </div>
             </div>
         </div>
-        <div className="ubiSideButtons">
+        {/* <div className="ubiSideButtons">
             <div className="mwrBottom mbButtons">
                 <button>
                     <img src="/images/questionmarkIcon.png" alt="" style={{width:"25px"}} />
                     <span>How to add Account</span>
                 </button>
             </div>
-        </div>
+        </div> */}
     </div>
   )
 }

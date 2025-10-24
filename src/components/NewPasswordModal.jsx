@@ -89,7 +89,7 @@ const handleSave = async () => {
               type="password"
               id="oldPassword"
               value={oldPassword}
-              onChange={(e) => setOldPassword(e.target.value)}
+              onChange={(e) => e.target.value?.includes(" ") ? "" : setOldPassword(e.target.value)}
             />
           </div>
         </div>
@@ -102,7 +102,7 @@ const handleSave = async () => {
               type="password"
               id="newPassword"
               value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
+              onChange={(e) => e.target.value?.includes(" ") ? "" : setNewPassword(e.target.value)}
             />
           </div>
         </div>
@@ -115,7 +115,7 @@ const handleSave = async () => {
               type="password"
               id="confirmPassword"
               value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              onChange={(e) => e.target.value?.includes(" ") ? "" : setConfirmPassword(e.target.value)}
             />
           </div>
         </div>

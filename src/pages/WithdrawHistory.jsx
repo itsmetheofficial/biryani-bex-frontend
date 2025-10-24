@@ -6,10 +6,12 @@ import moment from 'moment';
 import { useCookies } from 'react-cookie';
 import { callGetAPI } from '../api/apiHelper';
 import { API_ENDPOINTS } from '../api/apiConfig';
+import { useNavigate } from 'react-router-dom';
 
 const { Option } = Select;
 
 export default function WithdrawHistory() {
+    const navigate = useNavigate();
     const [cookies] = useCookies();
     const [withdrawDetialsModalVisible, setwithdrawDetialsModalVisible] = useState(false);
     const [selectedwithdrawEntry, setselectewithdrawEntry] = useState(null);
@@ -24,7 +26,7 @@ export default function WithdrawHistory() {
 
     const [filterData, setFilterData] = useState({
         // transactionType: 'Withdraw',
-        transactionType: 'Bonus',
+        transactionType: 'Withdraw',
         paymentMode: '',
         status: '',
         fromDate: null,
@@ -96,7 +98,7 @@ export default function WithdrawHistory() {
     const clearAllFilters = () => {
         setFilterData({
             // transactionType: 'Withdraw',
-            transactionType: 'Bonus',
+            transactionType: 'Withdraw',
             paymentMode: '',
             status: '',
             fromDate: null,
@@ -109,6 +111,9 @@ export default function WithdrawHistory() {
     return (
         <div className="alltransactionPage withdrawHistoryPage">
             <div className="pageHeader">
+                <button onClick={()=>navigate(-1)} className="headerPrevButton">
+                    <img src="/images/leftArrowFilled.svg" alt=""/>
+                </button>
                 <span>Withdraw History</span>
             </div>
 

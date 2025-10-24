@@ -23,6 +23,7 @@ export default function AddUSDTAccount() {
 
     const handleChange = (e) => {
         const { name, value } = e.target
+        if(value.includes(" ")) return
         setFormData(prev => ({ ...prev, [name]: value }))
     }
 
@@ -97,7 +98,7 @@ export default function AddUSDTAccount() {
             <div className="auHeaderOuter">
                 <div className="auHeader">
                     <span>Add USDT Address</span>
-                    <button onClick={() => navigate("/add-account-details")}>
+                    <button onClick={() => navigate(-1)}>
                         <img src="/images/closeModalIcon.png" alt="" />
                     </button>
                 </div>
@@ -147,14 +148,14 @@ export default function AddUSDTAccount() {
                     </div>
                 </div>
             </div>
-            <div className="ubiSideButtons">
+            {/* <div className="ubiSideButtons">
                 <div className="mwrBottom mbButtons">
                     <button>
                         <img src="/images/questionmarkIcon.png" alt="" style={{ width: "25px" }} />
                         <span>How to add Account</span>
                     </button>
                 </div>
-            </div>
+            </div> */}
 
             {
                 showSuccessModalVisible &&

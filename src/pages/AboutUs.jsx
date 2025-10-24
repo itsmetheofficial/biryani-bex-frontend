@@ -8,7 +8,7 @@ export default function AboutUs({allSettings}) {
         <div className="auHeaderOuter">
             <div className="auHeader">
                 <span>About Us</span>
-                <button onClick={() => navigate("/")}>
+                <button onClick={() => navigate(-1)}>
                     <img src="/images/closeModalIcon.png" alt="" />
                 </button>
             </div>

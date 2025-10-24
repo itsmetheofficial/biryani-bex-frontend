@@ -3,8 +3,10 @@ import { message } from "antd";
 import { useCookies } from "react-cookie";
 import { callGetAPI, callPostAPI } from "../api/apiHelper";
 import { API_ENDPOINTS } from "../api/apiConfig";
+import { useNavigate } from "react-router-dom";
 
 export default function Gifts() {
+  const navigate = useNavigate();
   const [cookies] = useCookies(["token", "userDetails"]);
   const [giftCode, setGiftCode] = useState("");
   const [claimedGifts, setClaimedGifts] = useState([]);
@@ -73,6 +75,9 @@ export default function Gifts() {
   return (
     <div className="giftsPage">
       <div className="pageHeader">
+        <button onClick={()=>navigate(-1)} className="headerPrevButton">
+            <img src="/images/leftArrowFilled.svg" alt=""/>
+        </button>
         <img src="/images/giftIcon.svg" alt="" width={50} />
         <span>Gift</span>
       </div>
@@ -96,7 +101,7 @@ export default function Gifts() {
                   type="text"
                   placeholder="Please Enter Gift Code Here"
                   value={giftCode}
-                  onChange={(e) => setGiftCode(e.target.value)}
+                  onChange={(e) => e.target.value?.includes(" ") ?null : setGiftCode(e.target.value)}
                 />
                 <div className="gbcButtonOuter">
                   <button onClick={handleClaim} disabled={loading}>

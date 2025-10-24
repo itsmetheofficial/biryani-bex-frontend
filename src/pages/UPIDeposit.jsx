@@ -107,7 +107,7 @@ export default function UPIDeposit() {
       <div className="auHeaderOuter">
         <div className="auHeader">
           <span>UPI Deposit</span>
-          <button onClick={() => navigate('/deposit')}>
+          <button onClick={() => navigate(-1)}>
             <img src="/images/closeModalIcon.png" alt="" />
           </button>
         </div>
@@ -151,7 +151,7 @@ export default function UPIDeposit() {
                       type="text"
                       placeholder="Please Enter Transaction ID Here"
                       value={formData.transactionId}
-                      onChange={(e) => setFormData({ ...formData, transactionId: e.target.value })}
+                      onChange={(e) => e.target.value?.includes(" ")?null: setFormData({ ...formData, transactionId: e.target.value })}
                       style={{width:"100%"}}
                     />
                     {/* <div className="spcButtonContainer">
@@ -173,7 +173,7 @@ export default function UPIDeposit() {
                 <br />
               </div>
             </div>
-            <div className="ubiSideButtons">
+            {/* <div className="ubiSideButtons">
               <div className="mwrBottom mbButtons">
                 <button>
                   <img src="/images/videoPauseIcon.png" alt="" />
@@ -184,7 +184,7 @@ export default function UPIDeposit() {
                   <span>Deposit History</span>
                 </button>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

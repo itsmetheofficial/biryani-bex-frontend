@@ -73,10 +73,11 @@ export default function SubordinateData() {
         setFilters({ searchUID: '', level: 'All', dateFilter: 'All', selectedDate: null });
     };
 
-    const filteredData = subordinates.filter(item =>
-        item.uid?.includes(filters.searchUID)
-    );
-
+    
+    // const filteredData = subordinates.filter(item =>
+    //     item.uid?.includes(filters.searchUID)
+    // );
+    const filteredData = subordinates
     return (
         <div className="aboutUsPage privacyPolicyPage subordinateDataPage">
             <div className="auHeaderOuter">
@@ -99,7 +100,7 @@ export default function SubordinateData() {
                 <div className="pptMidInner">
                     <div className="ptmItem">
                         <div className="pmIContent">
-                            <div className="pmcItem"><span>{dashbordData?.directSubordinates?.registered ||0}</span><p>Deposit number</p></div>
+                            <div className="pmcItem"><span>{dashbordData?.directSubordinates?.depositUsers ||0}</span><p>Deposit number</p></div>
                             <div className="pmcItem green"><span>{dashbordData?.directSubordinates?.depositUsers ||0}</span><p>Number of bettors</p></div>
                             <div className="pmcItem"><span>{dashbordData?.directSubordinates?.firstDepositUsers ||0}</span><p>First deposits</p></div>
                         </div>
@@ -204,13 +205,13 @@ export default function SubordinateData() {
                                         <div className="tecRow">
                                             <div className="tecTd level">
                                                 <span style={{ marginRight: 10 }}>{row?.level}</span>
-                                                <div className="tudIcon">
+                                                {/* <div className="tudIcon">
                                                     <img src="/images/tableUserDaaaa.png" alt="" />
-                                                </div>
+                                                </div> */}
                                             </div>
-                                            <div className="tecTd orderId"><span>{row?.uid}</span></div>
-                                            <div className="tecTd game dateTime"><span>{row?.date} | {row?.time}</span></div>
-                                            <div className="tecTd depositWithdrwal"><span>+ ₹{row?.deposit}</span></div>
+                                            <div className="tecTd orderId"><span>{row?.userId}</span></div>
+                                            <div className="tecTd game dateTime"><span>{row?.date ? row?.date+" | " :""}  {row?.time}</span></div>
+                                            <div className="tecTd depositWithdrwal"><span>₹{row?.depositAmount}</span></div>
                                             <div className="tecTd balance commission"><span>₹{row?.commission}</span></div>
                                         </div>
                                     </div>

@@ -222,7 +222,7 @@ export default function Home({isChatOpen}) {
 
     return (
         <div className={`homePage ${isChatOpen?"chatOpenHome":""}`}>
-            <div className="topOffers">
+            
                 {
                     loading?.homePageDetails ?
                         <div style={{
@@ -235,52 +235,46 @@ export default function Home({isChatOpen}) {
                         </div>
                     :
                     homePageDetailsData?.bannerLogo?.length>0 ?
-                        <Carousel
-                            ref={topSlider}
-                            slidesToShow={2}
-                            slidesToScroll={1}
-                            dots={false}
-                            infinite
-                            beforeChange={(current, next) => {}}
-                            responsive={[
-                                {
-                                    breakpoint: 480,
-                                    settings: {
-                                        slidesToShow: 1,
+                        <div className="topOffers">
+                            <Carousel
+                                ref={topSlider}
+                                slidesToShow={2}
+                                slidesToScroll={1}
+                                dots={false}
+                                infinite
+                                beforeChange={(current, next) => {}}
+                                responsive={[
+                                    {
+                                        breakpoint: 480,
+                                        settings: {
+                                            slidesToShow: 1,
+                                        },
                                     },
-                                },
-                                {
-                                    breakpoint: 768,
-                                    settings: {
-                                        slidesToShow: 1,
+                                    {
+                                        breakpoint: 768,
+                                        settings: {
+                                            slidesToShow: 1,
+                                        },
                                     },
-                                },
-                            ]}
-                            autoplay 
-                            autoplaySpeed={3000} 
-                            speed={500}
-                            >
-                                {
-                                    homePageDetailsData?.bannerLogo?.map((image,index)=>(
-                                        <div className="toItem" key={index}>
-                                            <img src={BASE_URL+"/Images/"+image} alt="" />
-                                        </div>
-                                    ))
-                                }                      
-                        </Carousel>
-                    :
-                        <div style={{
-                            height:100,
-                            display:"flex",
-                            alignItems:"center",
-                            justifyContent:"center",
-                            color:"#fff"
-                        }}>
-                            No data found!
+                                ]}
+                                autoplay 
+                                autoplaySpeed={3000} 
+                                speed={500}
+                                centerMode={true} 
+                                centerPadding="0" 
+                                >
+                                    {
+                                        homePageDetailsData?.bannerLogo?.map((image,index)=>(
+                                            <div className="toItem" key={index}>
+                                                <img src={BASE_URL+"/Images/"+image} alt="" />
+                                            </div>
+                                        ))
+                                    }                      
+                            </Carousel>
                         </div>
+                    :null
 
                 }
-            </div>
             <div className="topGames">
                 <div className="tgTop sliderHeading">
                     <div className="shLeft">
@@ -308,7 +302,7 @@ export default function Home({isChatOpen}) {
                         topGameList?.length>0 ?
                             <Carousel
                                 ref={topGameSlider}
-                                slidesToShow={3}
+                                slidesToShow={5}
                                 slidesToScroll={1}
                                 dots={false}
                                 infinite
@@ -317,31 +311,31 @@ export default function Home({isChatOpen}) {
                                     {
                                         breakpoint: 480,
                                         settings: {
-                                            slidesToShow: 1,
+                                            slidesToShow: 2,
                                         },
                                     },
                                     {
                                         breakpoint: 768,
                                         settings: {
-                                            slidesToShow: 2,
+                                            slidesToShow: 3,
                                         },
                                     },
                                     {
                                         breakpoint: 1500,
                                         settings: {
-                                            slidesToShow: isChatOpen?2:3,
+                                            slidesToShow: isChatOpen?4:5,
                                         },
                                     },
                                     {
                                         breakpoint: 1400,
                                         settings: {
-                                            slidesToShow: isChatOpen?2:3,
+                                            slidesToShow: isChatOpen?4:5,
                                         },
                                     },
                                     {
                                         breakpoint: 1200,
                                         settings: {
-                                            slidesToShow: 2,
+                                            slidesToShow: 4,
                                         },
                                     },
                                 ]}
@@ -662,10 +656,10 @@ export default function Home({isChatOpen}) {
                             <img src="/images/userfilledIcon.svg" alt="" width={15} />
                             <span>User</span>
                         </div>
-                        <div className="tehItem game">
+                        {/* <div className="tehItem game">
                             <img src="/images/consoleIcon.svg" alt="" width={16} />
                             <span>Game</span>
-                        </div>
+                        </div> */}
                         <div className="tehItem wallet">
                             <img src="/images/wallettableIcon.svg" alt="" width={21} />
                             <span className="desktopView">Recent Withdraw Amount</span>
@@ -696,10 +690,10 @@ export default function Home({isChatOpen}) {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="tecTd game">
+                                                {/* <div className="tecTd game">
                                                     <img src={BASE_URL+"/Images/"+rowData?.gameImage} alt="" width={25} />
                                                     <span>Aviator</span>
-                                                </div>
+                                                </div> */}
                                                 <div className="tecTd price">
                                                     ₹{rowData?.amount}
                                                 </div>

@@ -4,8 +4,10 @@ import { callGetAPI } from '../api/apiHelper';
 import { API_ENDPOINTS } from '../api/apiConfig';
 import { message, Spin } from 'antd';
 import moment from 'moment';
+import { useNavigate } from 'react-router-dom';
 
 export default function Notification() {
+    const navigate = useNavigate();
     const [cookies,setCookies] = useCookies();
     const [loading,setLoading] = useState();
     const [notificationData,setNotificationData] = useState([]);
@@ -37,6 +39,9 @@ export default function Notification() {
   return (
     <div className="notificationPage">
        <div className="pageHeader">
+            <button onClick={()=>navigate(-1)} className="headerPrevButton">
+                <img src="/images/leftArrowFilled.svg" alt=""/>
+            </button>
             <img src="/images/notificationBell.svg" alt="" width={28} />
             <span>Notifications</span>
         </div>

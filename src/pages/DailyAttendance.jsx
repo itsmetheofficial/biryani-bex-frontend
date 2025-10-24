@@ -80,6 +80,9 @@ export default function DailyAttendance() {
     return (
         <div className="dAttendancePage">
             <div className="pageHeader">
+                <button onClick={()=>navigate(-1)} className="headerPrevButton">
+                    <img src="/images/leftArrowFilled.svg" alt=""/>
+                </button>
                 <img src="/images/dattendanceIcon.svg" alt="" width={40} />
                 <span>Daily Attendance</span>
             </div>

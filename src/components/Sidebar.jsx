@@ -5,6 +5,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import MyAccount from "../pages/MyAccount";
 import { useCookies } from "react-cookie";
 import { BASE_URL } from "../api/apiConfig";
+import { EditOutlined } from "@ant-design/icons";
 
 const Sidebar = ({ collapsed, toggleMenu }) => {
     const navigate = useNavigate();
@@ -19,6 +20,14 @@ const Sidebar = ({ collapsed, toggleMenu }) => {
     const _mobileSidebarClose =()=>{
         if(window.innerWidth<993){
             toggleMenu()
+        }
+    }
+
+    const _closeMenuOnBlur =(e)=>{
+         if(window.innerWidth<993){
+            if(e.target?.classList?.contains("sider")){
+                 toggleMenu()
+            }
         }
     }
 
@@ -148,13 +157,11 @@ const Sidebar = ({ collapsed, toggleMenu }) => {
 
     return (
         <>
-            <Sider className={`sider ${collapsed ? "sider-collapsed" : ""}`}>
+            <Sider className={`sider ${collapsed ? "sider-collapsed" : ""}`} onClick={_closeMenuOnBlur}>
                 <div className="sider-header">
                     <div className="shTop">
                         <div className="shtLeft">
-                            <Button onClick={()=>setmyAccountModalVisible(true)}>
-                                <img src="/images/rightArrowIconRed.png" alt="" />
-                            </Button>
+                            <span style={{width:20,display:"block"}}> </span>
                         </div>
                         <div className="shtMiddle">
                             <img src={cookies?.userDetails?.profileImage?.length ? `${BASE_URL}${cookies?.userDetails?.profileImage}` :"/images/proImage.png"} alt="" />
@@ -170,7 +177,14 @@ const Sidebar = ({ collapsed, toggleMenu }) => {
                         </div>
                     </div>
                     <div className="shBottom">
-                        <div className="shName">{cookies?.userDetails?.userName}</div>
+                        <div className="shName">
+                            <span>
+                                {cookies?.userDetails?.name} 
+                            </span>
+                            <Button onClick={()=>setmyAccountModalVisible(true)}>
+                                {/* <img src="/images/rightArrowIconRed.png" alt="" /> */}
+                                <EditOutlined style={{color:"#fff",fontSize:20}} />
+                            </Button></div>
                         <div className="shId">ID: {cookies?.userDetails?.userId}</div>
                     </div>
                 </div>
