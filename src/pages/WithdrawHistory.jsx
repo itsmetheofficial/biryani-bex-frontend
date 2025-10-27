@@ -25,7 +25,6 @@ export default function WithdrawHistory() {
     const itemsPerPage = 10;
 
     const [filterData, setFilterData] = useState({
-        // transactionType: 'Withdraw',
         transactionType: 'Withdraw',
         paymentMode: '',
         status: '',
@@ -51,6 +50,7 @@ export default function WithdrawHistory() {
             toDate: filterData.toDate ? moment(filterData.toDate).format('YYYY-MM-DD') : '',
             page,
             limit: itemsPerPage,
+            userId:cookies?.userDetails?.userId
         };
 
         try {

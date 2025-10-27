@@ -26,9 +26,11 @@ export default function DepositPage() {
     const [depositHistory,setDepositHistory] = useState([]);
     const [upiList,setupiList] = useState([]);
     const [usdtList,setusdtList] = useState([]);
+    const [usdtConversionRate,setusdtConversionRate] = useState(100);
     const [selectedUpi, setselectedUpi] = useState(null);
     const [selectedUsdt, setselectedUsdt] = useState(null);
     const [minimumDepositAmount,setMinimumDepositAmount] = useState(100);
+    const [bonusData,setBonusData] = useState(null)
     const [loading,setLoading] = useState({
         tableLoading:false,
         rulesLoading:false,
@@ -38,6 +40,12 @@ export default function DepositPage() {
         payFromUPiLoading:false
     });
 
+    
+    useEffect(()=>{
+        if(cookies?.token){
+            fetchgetDepositBonus()
+        }
+    },[cookies?.token])
 
     useEffect(()=>{
         // let udpatedData = depositHistory?.filter((data)=>data?.paymentMethod?.toLowerCase()===paymentType?.toLowerCase());
@@ -87,12 +95,21 @@ export default function DepositPage() {
         setLoading((prev)=>({...prev,rulesLoading:false}));
     }
 
+    const fetchgetDepositBonus = async () => {
+        try {
+            const response = await callGetAPI(API_ENDPOINTS.GET_DEPOSITE_BONUS, cookies?.token,{});
+            setBonusData(response?.depositBonus||null)
+        } catch (error) {
+            console.error('Error fetching deposit bonus:', error);
+            return null;
+        }
+    }
+
      const fetchTransactions = async (token) => {
         try {
         setLoading((prev)=>({...prev,tableLoading:true}))
 
-        // const response = await callGetAPI(API_ENDPOINTS.GET_ALL_TRANSACTIONS, cookies.token,{page:1,limit:1000,transactionType:"Deposit"});
-        const response = await callGetAPI(API_ENDPOINTS.GET_ALL_TRANSACTIONS, token,{page:1,limit:1000,transactionType:"Bonus"});
+        const response = await callGetAPI(API_ENDPOINTS.GET_ALL_TRANSACTIONS, token,{page:1,limit:1000,transactionType:"Deposit",userId:cookies?.userDetails?.userId});
 
         if (response?.success) {
             setDepositHistory(response?.transactions || []);
@@ -113,7 +130,7 @@ export default function DepositPage() {
             const res = await callGetAPI(API_ENDPOINTS.GET_UPI_LIST,token);
             if(res?.success){
                 setupiList(res?.upiList)
-                if(res?.upiList?.length===1){
+                if(res?.upiList?.length>=1){
                     setselectedUpi(res?.upiList[0]?.upiId)
                 }
             }else{
@@ -133,8 +150,9 @@ export default function DepositPage() {
             const res = await callGetAPI(API_ENDPOINTS.GET_USDT_WALLET_LIST,token);
             if(res?.success){
                 setusdtList(res?.usdtWalletList)
-                if(res?.usdtWalletList?.length===1){
-                    setselectedUsdt(res?.usdtWalletList[0]?._id)
+                setusdtConversionRate(res?.usdtConversionRate)
+                if(res?.usdtWalletList?.length>=1){
+                    setselectedUsdt(res?.usdtWalletList[0]?.usdtAddress)
                 }
             }else{
                 setusdtList([])
@@ -152,13 +170,13 @@ export default function DepositPage() {
     }
     const _changeDepostAmount =(amount)=>{
         setdepositAmount(amount)
-        setUsdtAmount(amount/100)
+        setUsdtAmount(amount/usdtConversionRate)
     }
     const _depositInputChange =(e)=>{
         if(e.target.value?.length>0 || !isNaN(e.target.value)){
             if(!isNaN(e.target.value)){
                 setdepositAmount(parseInt(e.target.value))
-                setUsdtAmount(parseFloat(parseInt(e.target.value)/100).toFixed(2))
+                setUsdtAmount(parseFloat(parseInt(e.target.value)/usdtConversionRate).toFixed(2))
             }
         }
     }
@@ -166,7 +184,7 @@ export default function DepositPage() {
         if(e.target.value?.length>0 || !isNaN(e.target.value)){
             if(!isNaN(e.target.value)){
                 setUsdtAmount(parseInt(e.target.value))
-                setdepositAmount(parseInt(e.target.value)*100)
+                setdepositAmount(parseInt(e.target.value)*usdtConversionRate)
             }
         }
     }
@@ -302,7 +320,11 @@ export default function DepositPage() {
                                 
                                     {
                                         (depositRules?.activeDepositMethod?.manualUpi) ?
-                                            <button onClick={()=>_changePaymentType("payFromUPI")}>
+                                            <button onClick={()=>_changePaymentType("payFromUPI")} className='depositPaymentMethod'>
+                                                <div className="imageSection">
+                                                    <img src="/images/bonusIcon.png" alt="" />
+                                                    <span>{bonusData?.payFromUpi?.bonusAmount}%</span>
+                                                </div>
                                                 <div className={`dmItemInner ${paymentType ==="payFromUPI"?"active":"" }`}>
                                                     <p>Pay From</p>                            
                                                     <span>UPI</span>                            
@@ -312,7 +334,11 @@ export default function DepositPage() {
                                     }
                                     {
                                         (depositRules?.activeDepositMethod?.manualUpi) ?
-                                            <button onClick={()=>_changePaymentType("upi")}>
+                                            <button onClick={()=>_changePaymentType("upi")} className='depositPaymentMethod'>
+                                                <div className="imageSection">
+                                                    <img src="/images/bonusIcon.png" alt="" />
+                                                    <span>{bonusData?.manualUpi?.bonusAmount}%</span>
+                                                </div>
                                                 <div className={`dmItemInner ${paymentType ==="upi"?"active":"" }`}>
                                                     <img src="/images/upi.svg" alt="" />
                                                     <span>UPI</span>                            
@@ -322,7 +348,11 @@ export default function DepositPage() {
                                     }
                                     {
                                         (depositRules?.activeDepositMethod?.usdt) ?
-                                            <button onClick={()=>_changePaymentType("usdt")}>
+                                            <button onClick={()=>_changePaymentType("usdt")} className='depositPaymentMethod'>
+                                                <div className="imageSection">
+                                                    <img src="/images/bonusIcon.png" alt="" />
+                                                    <span>{bonusData?.usdt?.bonusAmount}%</span>
+                                                </div>
                                                 <div className={`dmItemInner ${paymentType ==="usdt"?"active":"" }`}>
                                                     <img src="/images/usdtIcon.svg" alt="" />
                                                     <span>USDT TRC20</span>                            
@@ -393,7 +423,7 @@ export default function DepositPage() {
                                     {
                                         usdtList?.map((item,index)=>{
                                             return(
-                                                <Select.Option value={item?.item?.usdtAddress} key={item?._id || index}>
+                                                <Select.Option value={item?.usdtAddress} key={item?._id || index}>
                                                     {item?.label} : {item?.usdtAddress}
                                                 </Select.Option>
                                             )
@@ -413,7 +443,7 @@ export default function DepositPage() {
                             {
                                 paymentType==="usdt" &&
                                     <span className='dollarSymboltext'>
-                                        1 USDT = ₹100
+                                        1 USDT = ₹{usdtConversionRate}
                                     </span>
                             }
 
@@ -429,25 +459,21 @@ export default function DepositPage() {
                             <button onClick={()=>_changeDepostAmount(4000)}> <span className={`datButtonInner ${depositAmount===4000 ?"active":""}`} >{paymentType==="usdt"?"$ 40":"₹ 4K"}</span></button>
                             <button className="bonusButton" onClick={()=>_changeDepostAmount(5000)}>
                                 <span  className={`datButtonInner ${depositAmount===5000 ?"active":""}`}>
-                                    <img src="/images/bonus2.png" alt="" />
                                     <span>{paymentType==="usdt"?"$ 50":"₹ 5K"}</span>
                                 </span>
                             </button>
                             <button className="bonusButton" onClick={()=>_changeDepostAmount(10000)}>
                                 <span  className={`datButtonInner ${depositAmount===10000 ?"active":""}`}>
-                                    <img src="/images/bonus4.png" alt="" />
                                     <span>{paymentType==="usdt"?"$ 100":"₹ 10K"}</span>
                                 </span>
                             </button>
                             <button className="bonusButton" onClick={()=>_changeDepostAmount(20000)}>
                                 <span  className={`datButtonInner ${depositAmount===20000 ?"active":""}`}>
-                                    <img src="/images/bonus6.png" alt="" />
                                     <span>{paymentType==="usdt"?"$ 200":"₹ 20K"}</span>
                                 </span>
                             </button>
                             <button className="bonusButton" onClick={()=>_changeDepostAmount(50000)}>
                                 <span  className={`datButtonInner ${depositAmount===50000 ?"active":""}`}>
-                                    <img src="/images/bonus8.png" alt="" />
                                     <span>{paymentType==="usdt"?"$ 500":"₹ 50K"}</span>
                                 </span>
                             </button>

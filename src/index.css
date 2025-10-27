@@ -2593,9 +2593,13 @@ input[type="number"] {
 }
 
 .mwtRight {
-  width: 25%;
-  padding: 0 20px 0 25px;
-  max-width: 330px;
+  width: 50%;
+  padding: 0 10px;
+  display: flex;
+  gap: 30px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .mwrTop button {
@@ -3730,7 +3734,7 @@ input[type="number"] {
 
 .dmItemInner {
   border-radius: 22px;
-  padding: 20px;
+  padding: 40px 20px 20px;
   height: 140px;
   display: flex;
   flex-direction: column;
@@ -4826,11 +4830,6 @@ input[type="number"] {
 .pageHeader {
   font-size: 28px;
 }
-
-.mwtRight {
-  padding: 0 20px 0 0;
-}
-
 .dofItemOuter {
   width: 31%;
 }
@@ -5107,15 +5106,6 @@ mask-image: radial-gradient(circle, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 70%, r
 .mwTop {
   flex-wrap: wrap;
   width: 100%;
-}
-
-.mwtRight {
-  width: 70%;
-  padding: 40px 0 0;
-  display: flex;
-  gap: 30px;
-  max-width: none;
-  align-items: center;
 }
 
 .mwrBottom.mbButtons {
@@ -6373,6 +6363,39 @@ mask-image: radial-gradient(circle, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 70%, r
   width: 100%;
 } */
 
+.depositPaymentMethod{
+  position: relative;
+}
+.imageSection{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: auto;
+  bottom: auto;
+  width: 50px;
+  display: block;
+}
+.imageSection img{
+  display: block;
+  width: 100%;
+}
+.imageSection span{
+  display: block;
+  width: 100%;
+  position: absolute;
+  top: 15px;
+  left: 0;
+  right: 0;
+  bottom: auto;
+  text-align: center;
+  color: #ffea00;
+  font-size: 16px;
+  font-weight: 600;
+}
+.homePage .liveWithdrwalHistory .tecTd ,
+.homePage .liveWithdrwalHistory .tehItem {
+  width: 50%;
+}
 @media (max-width: 1500px) {
   .splashPage {
     font-size: 80px;
@@ -7182,10 +7205,6 @@ mask-image: radial-gradient(circle, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 70%, r
 
   .mwtMid .mwtBalance span {
     font-size: 22px;
-  }
-
-  .mwtRight {
-    width: auto;
   }
 
   .myWalletPage .tehItem.timeDate {
@@ -9455,9 +9474,20 @@ mask-image: radial-gradient(circle, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 70%, r
   .dmItemInner {
     height: 90px;
     width: 100%;
-    padding: 15px 0;
+    padding: 40px 0 15px;
     gap: 10px;
     border-radius: 16px;
+  }
+  .imageSection{
+    width: 42px;
+    height: 28px;
+  }
+  .imageSection span{
+    font-size: 12px;
+    top: 10px;
+  }
+  .imageSection img{
+    height: 100%;
   }
 
   .dmlist button {

@@ -44,6 +44,7 @@ export default function MyWallet() {
             const params = new URLSearchParams();
             params.append("page", 1);
             params.append("limit", 10);
+            params.append("userId", cookies?.userDetails?.userId);
 
             const url = `${API_ENDPOINTS.GET_ALL_TRANSACTIONS}?${params.toString()}`;
 
@@ -119,8 +120,8 @@ export default function MyWallet() {
                     </div>
                 </div>
 
-                <div className="mwtMid">
-                    <div className="mwtLeft">
+                {/* <div className="mwtMid"> */}
+                    {/* <div className="mwtLeft">
                         <div className="mwlTopOuter">
                             <div className="mwlTop">
                                 <div className="mwtText">
@@ -138,16 +139,16 @@ export default function MyWallet() {
                             <p>If you want to withdraw this bonus please read the rules bonus amount</p>
                         </div>
                         <div className="mwlButtons">
-                            {/* <button onClick={handleTransferBonus}>
+                            <button onClick={handleTransferBonus}>
                                 <span>
                                     <img src="/images/transferIcon.svg" alt="" />
                                     Transfer to Main Wallet
                                 </span>
-                            </button> */}
+                            </button>
                             <button className='mwlRulesButton' onClick={() => navigate("/rules")}>Read Rules</button>
                         </div>
-                    </div>
-                </div>
+                    </div> */}
+                {/* </div> */}
 
                 <div className="mwtRight">
                     <div className="mwrTop mbButtons">

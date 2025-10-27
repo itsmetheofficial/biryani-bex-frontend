@@ -25,7 +25,6 @@ export default function DepositHistory() {
     const itemsPerPage = 10;
 
     const [filterData, setFilterData] = useState({
-        // transactionType: 'Deposit',
         transactionType: 'Deposit',
         paymentMode: '',
         status: '',
@@ -48,13 +47,14 @@ export default function DepositHistory() {
             toDate: filterData.toDate ? moment(filterData.toDate).format('YYYY-MM-DD') : '',
             page,
             limit: itemsPerPage,
+            userId:cookies?.userDetails?.userId
         };
 
         try {
             const response = await callGetAPI(
                 API_ENDPOINTS.GET_ALL_TRANSACTIONS,
                 cookies.token,
-                queryParams
+                queryParams,
             );
 
             if (response?.success) {

@@ -128,7 +128,7 @@ export default function WithdrawPage() {
         setLoading((prev)=>({...prev,tableLoading:true}))
 
         // const response = await callGetAPI(API_ENDPOINTS.GET_ALL_TRANSACTIONS, token,{page:1,limit:1000,transactionType:"Withdraw"});
-        const response = await callGetAPI(API_ENDPOINTS.GET_ALL_TRANSACTIONS, token,{page:1,limit:1000,transactionType:"Withdraw"});
+        const response = await callGetAPI(API_ENDPOINTS.GET_ALL_TRANSACTIONS, token,{page:1,limit:1000,transactionType:"Withdraw",userId:cookies?.userDetails?.userId});
 
         if (response?.success) {
             setTransationsData(response?.transactions || []);
@@ -216,6 +216,9 @@ export default function WithdrawPage() {
             }
             fetchTransactions(cookies?.token);
             _refreshBalance();
+            setwithdrawAmout(100);
+            setUserPassword("");
+            setUsdtAmount(1);
             setTimeout(() => {
                 setwithdrawAlertData({});
                 setWithdrawSuccessVisible(false)

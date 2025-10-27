@@ -44,4 +44,5 @@ export const API_ENDPOINTS = {
   GET_USDT_WALLET_LIST: "/api/getUsdtWalletList",
   CREATE_WITHDRAWREQUEST: "/api/user/createWithdrawRequest",
   CREATE_DEPOSITREQUEST: "/api/user/createDepositRequest",
+  GET_DEPOSITE_BONUS: "/api/getDepositBonus",
 };
