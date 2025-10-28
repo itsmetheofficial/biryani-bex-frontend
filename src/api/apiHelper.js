@@ -11,7 +11,7 @@ let socket = null;
 // ========================
 const handleUnauthorized = () => {
   cookies.remove("token", { path: "/" });
-  cookies.remove("userDetails", { path: "/" }); 
+  cookies.remove("userDetails", { path: "/" });
 
   if (window.location.pathname !== "/login") {
     // Optionally redirect:
@@ -170,8 +170,8 @@ export const connectSocket = (token, onMessageCallback) => {
   if (socket && socket.readyState === WebSocket.OPEN) return socket;
 
   // Remove token from URL
-  const wsUrl = "wss://biryanibet.desiapi.com/ws/";
-  socket = new WebSocket(wsUrl,token);
+  const wsUrl = "wss://okwin-admin-backend.biryanibet.com/ws/"
+  socket = new WebSocket(wsUrl, token);
 
 socket.onopen = () => {
   console.log("🔌 WebSocket connected");
