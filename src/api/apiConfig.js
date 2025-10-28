@@ -1,6 +1,6 @@
 // src/api/apiConfig.js
 
-export const BASE_URL = "https://biryanibet.desiapi.com";
+export const BASE_URL = "https://okwin-admin-backend.biryanibet.com";
 
 export const API_ENDPOINTS = {
   SIGNUP: "/api/user/signup",
