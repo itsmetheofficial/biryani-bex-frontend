@@ -160,9 +160,6 @@ const Sidebar = ({ collapsed, toggleMenu }) => {
             <Sider className={`sider ${collapsed ? "sider-collapsed" : ""}`} onClick={_closeMenuOnBlur}>
                 <div className="sider-header">
                     <div className="shTop">
-                        <div className="shtLeft">
-                            <span style={{width:20,display:"block"}}> </span>
-                        </div>
                         <div className="shtMiddle">
                             <img src={cookies?.userDetails?.profileImage?.length ? `${BASE_URL}${cookies?.userDetails?.profileImage}` :"/images/proImage.png"} alt="" />
                         </div>

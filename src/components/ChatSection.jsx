@@ -162,10 +162,10 @@ export default function ChatSection({ setIsChatOpen }) {
             <div className="csTop">
               <div className="cstLeft">
                 <div className="supportIcon">
-                  <img src="/images/chatIcon2.png" alt="" />
+                  <img src="/images/headphones-head-set-chat-live-support-svgrepo-com.svg" alt="" />
                 </div>
                 <div className="supportName">
-                  <p> Aniket Agarwal</p>
+                  <p>Support Team </p>
                   <small>{isSocketReady ? "Online" : "Not Connected"}</small>
                 </div>
               </div>

@@ -21,7 +21,8 @@ export default function Home({isChatOpen}) {
     const [filteredGameList,setFilteredGameList] = useState([]);
     const [topGameList,setTopGameList] = useState([]);
     const [liveWithdrawalsData,setLiveWithdrawalsData] = useState([]);
-    const [homePageDetailsData,setHomePageDetailsData] = useState([])
+    const [homePageDetailsData,setHomePageDetailsData] = useState([]);
+    const [allLiveWithdrawalsData,setAllLiveWithdrawalsData] = useState([]);
     const [loading,setLoading] =useState({
         liveWithdrawal:false,
         homePageDetails:false,
@@ -31,6 +32,36 @@ export default function Home({isChatOpen}) {
         earningChart:false,
         goToGameLoadingId:null,
     })
+
+     useEffect(() => {
+        if (!allLiveWithdrawalsData.length) return;
+
+        const dataLength = allLiveWithdrawalsData.length;
+
+        let liveChartDataIndex =0;
+        const updateData = () => {
+            let nextData = [];
+
+            // Fill nextData with exactly 10 items, wrapping if needed
+            for (let i = 0; i < 10; i++) {
+                nextData.push(allLiveWithdrawalsData[(liveChartDataIndex + i) % dataLength]);
+            }
+
+            setLiveWithdrawalsData(nextData);
+
+            // Move forward by 10, but wrap cleanly after showing all items
+            if (liveChartDataIndex + 10 >= dataLength) {
+                liveChartDataIndex = (liveChartDataIndex + 10) % dataLength
+            } else {
+                liveChartDataIndex = liveChartDataIndex + 10
+            }
+        };
+
+        updateData();
+        const interval = setInterval(updateData, 3000);
+
+        return () => clearInterval(interval);
+    }, [ allLiveWithdrawalsData]);
 
     useEffect(()=>{
         setTimeout(() => {
@@ -124,13 +155,13 @@ export default function Home({isChatOpen}) {
         setLoading(prev=>({...prev,liveWithdrawal:true}));
         try{
             let res = await callGetAPI(API_ENDPOINTS.GET_LIVE_WITHDRAWALS,token)
-            if(res?.status){
-                setLiveWithdrawalsData(res?.data)
+            if(res?.success){
+                setAllLiveWithdrawalsData(res?.data)
             }else{
-                setLiveWithdrawalsData([])
+                setAllLiveWithdrawalsData([])
             }            
         }catch{
-            setLiveWithdrawalsData([])
+            setAllLiveWithdrawalsData([])
         }finally{
             setLoading(prev=>({...prev,liveWithdrawal:false}));
         }
@@ -235,10 +266,10 @@ export default function Home({isChatOpen}) {
                         </div>
                     :
                     homePageDetailsData?.bannerLogo?.length>0 ?
-                        <div className="topOffers">
+                        <div className="topOffers" style={homePageDetailsData?.bannerLogo?.length===1 && window.innerWidth>768? {maxWidth:"50%",marginLeft:"auto",marginRight:"auto"}:{}}>
                             <Carousel
                                 ref={topSlider}
-                                slidesToShow={2}
+                                slidesToShow={homePageDetailsData?.bannerLogo?.length===1?1:2}
                                 slidesToScroll={1}
                                 dots={false}
                                 infinite

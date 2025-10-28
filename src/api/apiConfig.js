@@ -1,6 +1,7 @@
 // src/api/apiConfig.js
 
-export const BASE_URL = "https://biryanibet.desiapi.com";
+// export const BASE_URL = "https://biryanibet.desiapi.com";
+export const BASE_URL = "https://okwin-admin-backend.biryanibet.com";
 
 export const API_ENDPOINTS = {
   SIGNUP: "/api/user/signup",
@@ -31,6 +32,7 @@ export const API_ENDPOINTS = {
   GET_ALL_TRANSACTIONS: "/api/user/getAllTransactions",
   GET_REFERRAL_DASHBOARD:(userId) => `/api/user/getReferralDashboard/${userId}`,
   GET_REFERRAL_STATS: (userId) => `/api/user/getReferralStats/${userId}`,
+  GET_REFERRAL_STATS_NEW: (userId) => `/api/user/getReferralStatsUsers/${userId}`,
   GET_LIVE_WITHDRAWALS: "/api/user/liveWithdrawal",
   GET_HOMEPAGE_DETAILS: "/api/getHomepageDetails",
   GET_DEPOSITE_RULES: "/api/admin/getDepositeRules",

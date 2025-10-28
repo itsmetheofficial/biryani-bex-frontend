@@ -49,7 +49,7 @@ export default function Promotions() {
     const fetchSubOrdinatesData = async () => {
         setLoading((prev) => ({ ...prev, tableData: true }));
         try {
-            const response = await callGetAPI(API_ENDPOINTS.GET_REFERRAL_STATS(userId), token, {level:currentLevel});
+            const response = await callGetAPI(API_ENDPOINTS.GET_REFERRAL_STATS_NEW(userId), token, {level:currentLevel});
             if (response?.success) {
                 settableData(response?.data || []);
             } else {
@@ -227,7 +227,7 @@ export default function Promotions() {
                             <p>Level 1</p>
                             <div>
                                 <img src="/images/multiusercoloricon.svg" alt="" />
-                                <span>40</span>
+                                <span>{dashboardData?.levelStats?.level1Count || 0}</span>
                             </div>
                         </div>
                     </div>
@@ -238,7 +238,7 @@ export default function Promotions() {
                             <p>Level 2</p>
                             <div>
                                 <img src="/images/multiuserdefaultIcon.svg" alt="" />
-                                <span>60</span>
+                                <span>{dashboardData?.level2Count?.level1Count || 0}</span>
                             </div>
                         </div>
                     </div>
@@ -249,7 +249,7 @@ export default function Promotions() {
                             <p>Level 3</p>
                             <div>
                                 <img src="/images/multiuserdefaultIcon.svg" alt="" />
-                                <span>80</span>
+                                <span>{dashboardData?.level3Count?.level1Count || 0}</span>
                             </div>
                         </div>
                     </div>

@@ -44,7 +44,7 @@ export default function SubordinateData() {
                 query.date = filters.dateFilter;
             }
 
-            const response = await callGetAPI(API_ENDPOINTS.GET_REFERRAL_STATS(userId), token, query);
+            const response = await callGetAPI(API_ENDPOINTS.GET_REFERRAL_STATS_NEW(userId), token, query);
             if (response.success) {
                 setSubordinates(response.data || []);
             } else {
