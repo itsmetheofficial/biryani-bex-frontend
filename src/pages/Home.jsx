@@ -113,7 +113,7 @@ export default function Home({isChatOpen}) {
             if (res?.status) {
                 setAllGameList(res?.data);
                 setFilteredGameList(res?.data);
-                let topGames = res?.data?.filter((game) => game?.category?.some((category) => category?.category === "top Games"));
+                let topGames = res?.data?.filter((game) => game?.category?.some((category) => category?.category === "top Games"||category?.category === "Top Games"));
                 setTopGameList(topGames);
             }else{
                 setAllGameList([])

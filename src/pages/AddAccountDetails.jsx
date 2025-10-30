@@ -27,7 +27,7 @@ export default function AddAccountDetails() {
                             <img src="/images/BankIIcon.png" alt="" />
                         </span>
                         <span>
-                            Bank Account
+                            Bank Account/UPI
                         </span>
                         <span className="admButtonRightImg">
                             <img src="/images/rightArrowButtonImg.png" alt="" />

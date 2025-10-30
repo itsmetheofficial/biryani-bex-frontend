@@ -18,7 +18,9 @@ export default function AddBankAccount() {
         accountNumber: '',
         ifsc: '',
         phone: '',
-        mail: ''
+        mail: '',
+        upiName: '',
+        upiId: ''
     })
 
     const token = cookies?.token;
@@ -56,7 +58,7 @@ export default function AddBankAccount() {
     };
 
     const handleSubmit = async () => {
-        const { name, bankName, accountNumber, ifsc, phone, mail } = formData;
+        const { name, bankName, accountNumber, ifsc, phone, mail,upiName,upiId } = formData;
 
        
 
@@ -66,6 +68,8 @@ export default function AddBankAccount() {
         if (!ifsc?.trim()) return message.error('Please enter a valid IFSC Code');
         if (!phone?.trim() || phone.length !== 10) return message.error('Please enter a valid 10-digit Phone Number');
         if (!validateEmail(mail)) return message.error('Please enter a valid Email Address');
+        if (!upiName?.trim()) return message.error('Please enter a valid UPI Name');
+        if (!upiId?.trim()) return message.error('Please enter a valid UPI ID');
         // if (!validateIFSC(ifsc)) return message.error('Please enter a valid IFSC Code');
 
         if (!token || !userId) {
@@ -80,7 +84,9 @@ export default function AddBankAccount() {
             accountNumber,
             phone,
             mail,
-            ifsc
+            ifsc,
+            upiName,
+            upiId
         };
 
         try {
@@ -100,7 +106,9 @@ export default function AddBankAccount() {
                     accountNumber: '',
                     ifsc: '',
                     phone: '',
-                    mail: ''
+                    mail: '',
+                    upiName: '',
+                    upiId: ''
                 });
 
                 setTimeout(() => {
@@ -211,6 +219,28 @@ export default function AddBankAccount() {
                             type="email"
                             placeholder='Please Enter Your Email Address'
                             value={formData?.mail || ""}
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div className="admFormItem">
+                        <label htmlFor="upiName">UPI Name</label>
+                        <input
+                            id='upiName'
+                            name='upiName'
+                            type="text"
+                            placeholder='Please Enter Your UPI Name'
+                            value={formData?.upiName || ""}
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div className="admFormItem">
+                        <label htmlFor="upiId">UPI Id</label>
+                        <input
+                            id='upiId'
+                            name='upiId'
+                            type="text"
+                            placeholder='Please Enter Your UPI Id'
+                            value={formData?.upiId || ""}
                             onChange={handleChange}
                         />
                     </div>
