@@ -176,6 +176,7 @@ const Sidebar = ({ collapsed, toggleMenu }) => {
                     <div className="shBottom">
                         <div className="shName">
                             <span>
+                                {console.log("cookies : ",cookies?.userDetails)}
                                 {cookies?.userDetails?.name} 
                             </span>
                             <Button onClick={()=>setmyAccountModalVisible(true)}>

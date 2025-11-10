@@ -133,7 +133,8 @@ export default function MyAccount({ open, setOpen }) {
         onCancel={handleCancel}
         footer={null}
         className="history-depositModal customModal myAccountModal"
-        width={1500}
+        width={1000}
+        position='center center'
       >
         <div className="cmHeader">
           <span>My Account</span>
@@ -228,6 +229,7 @@ export default function MyAccount({ open, setOpen }) {
                       onChange={(e) =>
                         setUserDetails({ ...userDetails, mobile: e.target.value })
                       }
+                      disabled={true}
                     />
                   </div>
                 </div>
@@ -248,6 +250,7 @@ export default function MyAccount({ open, setOpen }) {
                         e.target.value?.includes(" ")?null:
                         setUserDetails({ ...userDetails, email: e.target.value })
                       }
+                      disabled={true}
                     />
                   </div>
                 </div>

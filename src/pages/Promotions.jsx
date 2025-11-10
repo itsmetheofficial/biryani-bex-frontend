@@ -9,6 +9,7 @@ import moment from 'moment';
 export default function Promotions() {
     const navigate = useNavigate();
     const [cookies,setCookies] = useCookies();
+    console.log("cookies : ",cookies)
     const [tableData,settableData]= useState([])
     const [currentPage, setCurrentPage] = useState(1);
     const [currentLevel, setCurrentLevel] = useState(1);
@@ -238,7 +239,7 @@ export default function Promotions() {
                             <p>Level 2</p>
                             <div>
                                 <img src="/images/multiuserdefaultIcon.svg" alt="" />
-                                <span>{dashboardData?.level2Count?.level1Count || 0}</span>
+                                <span>{dashboardData?.levelStats?.level2Count || 0}</span>
                             </div>
                         </div>
                     </div>
@@ -249,7 +250,7 @@ export default function Promotions() {
                             <p>Level 3</p>
                             <div>
                                 <img src="/images/multiuserdefaultIcon.svg" alt="" />
-                                <span>{dashboardData?.level3Count?.level1Count || 0}</span>
+                                <span>{dashboardData?.levelStats?.level3Count || 0}</span>
                             </div>
                         </div>
                     </div>
@@ -346,13 +347,13 @@ export default function Promotions() {
                                                         <span>6080GHX302990</span>
                                                     </div> */}
                                                     <div className="tecTd game dateTime">
-                                                        <span>{rowData?.createdAt?.length>0 ? moment(rowData?.createdAt).format("DD-MM-YYYY HH:mm") : "-"}</span>
+                                                        <span>{rowData?.time||"-"}</span>
                                                     </div>
                                                     <div className="tecTd price commission">
-                                                        <span>₹Static</span>
+                                                        <span>₹{rowData?.commission}</span>
                                                     </div>
                                                     <div className="tecTd price bonus">
-                                                        <span>₹Static</span>
+                                                        <span>₹{rowData?.depositAmount||0}</span>
                                                     </div>
                                                 </div>
                                             </div>

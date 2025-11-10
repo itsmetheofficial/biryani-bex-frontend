@@ -56,10 +56,7 @@ export default function Login() {
       if (response.token && response.user?._id) {
         // ✅ set token with useCookies
         setCookie("token", response.token, { path: "/", sameSite: "strict" });
-        setCookie("userDetails", response.user, {
-          path: "/",
-          sameSite: "strict",
-        });
+        await fetchUserDetailsHelper(response?.user?.userId);
 
         message.success(response.message || "Login successful!");
         navigate("/");

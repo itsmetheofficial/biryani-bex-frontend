@@ -47,4 +47,5 @@ export const API_ENDPOINTS = {
   CREATE_WITHDRAWREQUEST: "/api/user/createWithdrawRequest",
   CREATE_DEPOSITREQUEST: "/api/user/createDepositRequest",
   GET_DEPOSITE_BONUS: "/api/getDepositBonus",
+  UPLOAD_CHAT_MEDIA: "/api/user/uploadChatMedia",
 };

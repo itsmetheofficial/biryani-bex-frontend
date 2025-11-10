@@ -25,6 +25,12 @@ const buildHeaders = (token, isFormData = false) => {
   if (!isFormData) headers["Content-Type"] = "application/json";
   return headers;
 };
+const buildHeadersforMultiplepartData = (token, isFormData = false) => {
+  const headers = {};
+  if (token) headers["Authorization"] = `Bearer ${token}`;
+  if (!isFormData) headers["Content-Type"] = "application/json";
+  return headers;
+};
 
 const handleResponse = async (res) => {
   if (res.status === 401) {
@@ -55,6 +61,19 @@ export const callPostAPI = async (
   const res = await fetch(`${BASE_URL}${url}`, {
     method: "POST",
     headers: buildHeaders(token, isFormData),
+    body: isFormData ? data : JSON.stringify(data),
+  });
+  return await handleResponse(res);
+};
+export const callPostAPIMultipart = async (
+  url,
+  data = {},
+  token = null,
+  isFormData = false
+) => {
+  const res = await fetch(`${BASE_URL}${url}`, {
+    method: "POST",
+    headers: buildHeadersforMultiplepartData(token, isFormData),
     body: isFormData ? data : JSON.stringify(data),
   });
   return await handleResponse(res);

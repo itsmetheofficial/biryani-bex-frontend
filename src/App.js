@@ -50,6 +50,7 @@ import {
 import { Cookies } from "react-cookie";
 import { API_ENDPOINTS } from "./api/apiConfig";
 import UPIDeposit from "./pages/UPIDeposit";
+import { load } from "react-cookies";
 
 export const SocketContext = React.createContext(null); // ✅ global socket context
 
@@ -114,10 +115,16 @@ function App() {
 
     const isPublicRoute = publicRoutes.includes(location.pathname);
 
+    console.log("🔑 Token:", token);
+    console.log("🔑 Tlocation.pathnameoken:", location.pathname);
+    console.log("🔑loading", loading);
+    
     if (!token && !isPublicRoute) {
       navigate("/login", { replace: true });
+    }else if(token && isPublicRoute && !loading){
+      navigate("/", { replace: true });
     }
-  }, [location.pathname]);
+  }, [location.pathname,loading]);
 
   // 🔹 Verify login + fetch user details & balance
   useEffect(() => {

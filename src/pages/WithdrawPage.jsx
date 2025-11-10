@@ -305,6 +305,7 @@ export default function WithdrawPage() {
                                             </button>
                                         </div>
                                     </div>
+                                    <p className='withdrawableAmountPara'>Withdrawable Amount : ₹ {isNaN(cookies?.userDetails?.withdrawableAmount) ? 0 : parseFloat(cookies?.userDetails?.withdrawableAmount).toFixed(2)}</p>
                                 </div>
                             </div>
                         </div>

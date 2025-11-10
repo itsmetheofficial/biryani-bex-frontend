@@ -319,7 +319,7 @@ export default function DepositPage() {
                                 <div className="dmlist">
                                 
                                     {
-                                        (depositRules?.activeDepositMethod?.manualUpi) ?
+                                        (depositRules?.activeDepositMethod?.payFromUpi) ?
                                             <button onClick={()=>_changePaymentType("payFromUPI")} className='depositPaymentMethod'>
                                                 <div className="imageSection">
                                                     <img src="/images/bonusIcon.png" alt="" />

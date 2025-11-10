@@ -59,8 +59,8 @@ export default function SubordinateData() {
     };
     const fetchRefferalDashboard = async () => {
         setLoading((prev) => ({ ...prev, dashboardData: true }));
-        const res = await callGetAPI(API_ENDPOINTS.GET_REFERRAL_DASHBOARD(userId), token);
-        if (res?.success) {
+        const res = await callGetAPI(API_ENDPOINTS.GET_REFERRAL_STATS(userId), token);
+        if (res?.status) {
             setDashboardData(res?.data);
         } else {
             setDashboardData({})
@@ -100,27 +100,17 @@ export default function SubordinateData() {
                 <div className="pptMidInner">
                     <div className="ptmItem">
                         <div className="pmIContent">
-                            <div className="pmcItem"><span>{dashbordData?.directSubordinates?.depositUsers ||0}</span><p>Deposit number</p></div>
-                            <div className="pmcItem green"><span>{dashbordData?.directSubordinates?.depositUsers ||0}</span><p>Number of bettors</p></div>
-                            <div className="pmcItem"><span>{dashbordData?.directSubordinates?.firstDepositUsers ||0}</span><p>First deposits</p></div>
+                            {console.log("dashbordData", dashbordData)}
+                            <div className="pmcItem"><span>{dashbordData?.depositNumber ||0}</span><p>Deposit number</p></div>
+                            <div className="pmcItem green"><span>{dashbordData?.numberOfBettors ||0}</span><p>Number of bettors</p></div>
+                            <div className="pmcItem"><span>{dashbordData?.firstDepositCount ||0}</span><p>First deposits</p></div>
                         </div>
                     </div>
                     <div className="ptmItem">
                         <div className="pmIContent">
-                            <div className="pmcItem"><span>₹{dashbordData?.directSubordinates?.depositAmount ||0}</span><p>Deposit amount</p></div>
-                            <div className="pmcItem green"><span>₹
-                                {
-                                    (dashbordData?.directSubordinates?.depositAmount ||0) *
-                                    (dashbordData?.directSubordinates?.depositUsers ||0)
-                                }
-                                </span><p>Total bet</p></div>
-                            <div className="pmcItem">
-                                <span>₹
-                                    {
-                                    (dashbordData?.directSubordinates?.depositAmount ||0) *
-                                    (dashbordData?.directSubordinates?.firstDepositUsers ||0)
-                                    }
-                                    </span><p>First deposit amount</p>
+                            <div className="pmcItem"><span>₹{dashbordData?.depositAmount ||0}</span><p>Deposit amount</p></div>
+                            <div className="pmcItem green"><span>₹{dashbordData?.totalBet ||0}</span><p>Total bet</p></div>
+                            <div className="pmcItem"><span>₹{dashbordData?.firstDepositAmount||0}</span><p>First deposit amount</p>
                             </div>
                         </div>
                     </div>
