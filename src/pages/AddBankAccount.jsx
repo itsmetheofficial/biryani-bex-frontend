@@ -17,8 +17,8 @@ export default function AddBankAccount() {
         bankName: '',
         accountNumber: '',
         ifsc: '',
-        phone: '',
-        mail: '',
+        // phone: '',
+        // mail: '',
         upiName: '',
         upiId: ''
     })
@@ -58,7 +58,7 @@ export default function AddBankAccount() {
     };
 
     const handleSubmit = async () => {
-        const { name, bankName, accountNumber, ifsc, phone, mail,upiName,upiId } = formData;
+        const { name, bankName, accountNumber, ifsc,upiName,upiId } = formData;
 
        
 
@@ -66,8 +66,8 @@ export default function AddBankAccount() {
         if (!bankName?.trim()) return message.error('Please enter a valid Bank Name');
         if (!accountNumber?.trim()) return message.error('Please enter a valid Account Number');
         if (!ifsc?.trim()) return message.error('Please enter a valid IFSC Code');
-        if (!phone?.trim() || phone.length !== 10) return message.error('Please enter a valid 10-digit Phone Number');
-        if (!validateEmail(mail)) return message.error('Please enter a valid Email Address');
+        // if (!phone?.trim() || phone.length !== 10) return message.error('Please enter a valid 10-digit Phone Number');
+        // if (!validateEmail(mail)) return message.error('Please enter a valid Email Address');
         if (!upiName?.trim()) return message.error('Please enter a valid UPI Name');
         if (!upiId?.trim()) return message.error('Please enter a valid UPI ID');
         // if (!validateIFSC(ifsc)) return message.error('Please enter a valid IFSC Code');
@@ -82,8 +82,8 @@ export default function AddBankAccount() {
             bank: bankName,
             recipientName: name,
             accountNumber,
-            phone,
-            mail,
+            // phone,
+            // mail,
             ifsc,
             upiName,
             upiId
@@ -105,8 +105,8 @@ export default function AddBankAccount() {
                     bankName: '',
                     accountNumber: '',
                     ifsc: '',
-                    phone: '',
-                    mail: '',
+                    // phone: '',
+                    // mail: '',
                     upiName: '',
                     upiId: ''
                 });
@@ -199,7 +199,7 @@ export default function AddBankAccount() {
                             }}
                         />
                     </div>
-                    <div className="admFormItem">
+                    {/* <div className="admFormItem">
                         <label htmlFor="phone">Phone Number</label>
                         <input
                             id='phone'
@@ -221,7 +221,7 @@ export default function AddBankAccount() {
                             value={formData?.mail || ""}
                             onChange={handleChange}
                         />
-                    </div>
+                    </div> */}
                     <div className="admFormItem">
                         <label htmlFor="upiName">UPI Name</label>
                         <input

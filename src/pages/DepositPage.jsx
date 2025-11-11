@@ -242,7 +242,7 @@ export default function DepositPage() {
             if(depositAmount < depositRules?.depositMinimumAmount?.manualUpi){
                 message.error("Deposit amount should be greater than ₹"+depositRules?.depositMinimumAmount?.manualUpi)
             }else if(!selectedUpi?.length>0){
-                message.error("Please select UPI");
+                message.error("No UPI account available at this moment!");
             }else{
                 navigate(`/upi-deposit?amount=${depositAmount}&upi=${selectedUpi}`);
             }
@@ -251,7 +251,7 @@ export default function DepositPage() {
              if(depositAmount < depositRules?.depositMinimumAmount?.usdt){
                 message.error("Deposit amount should be greater than ₹"+depositRules?.depositMinimumAmount?.usdt)
             }else if(!selectedUsdt?.length>0){
-                message.error("Please select USDT");
+                message.error("No USDT account available at this moment!");
             }
             else{
                 navigate(`/usdt-deposit?amount=${depositAmount}&usdtWalletAddress=${selectedUsdt}`);
@@ -363,7 +363,7 @@ export default function DepositPage() {
                                 </div>
 
                             }
-                         {
+                         {/* {
                            (!loading?.rulesLoading && paymentType ==="upi") ?
                             <div className="mbButtons" style={
                                 {
@@ -397,8 +397,8 @@ export default function DepositPage() {
                                 </Select>
                             </div>
                              :null
-                         }
-                         {
+                         } */}
+                         {/* {
                            (!loading?.rulesLoading && paymentType ==="usdt") ?
                             <div className="mbButtons" style={
                                 {
@@ -432,7 +432,7 @@ export default function DepositPage() {
                                 </Select>
                             </div>
                              :null
-                         }
+                         } */}
                     </div>
                     <div className="depositAmount">
                         <div className='daTopFlex'>
