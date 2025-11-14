@@ -811,6 +811,14 @@ input[type="number"] {
   position: relative;
   max-width: 100%;
 }
+.ciContent img{
+  max-height: 100px;
+  max-width: 100px;
+}
+.ciContent video{
+  max-height: 140px;
+  max-width: 250px;
+}
 
 .myMessage .ciContent {
   background-color: #dcf8c6;

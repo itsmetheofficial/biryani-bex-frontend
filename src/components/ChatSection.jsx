@@ -65,7 +65,7 @@ export default function ChatSection({ setIsChatOpen }) {
           id: Date.now(),
           sender: "support",
           text: data?.message || "",
-          mediaUrl: data?.fileUrl ? `${BASE_URL}${data.fileUrl}` : null,
+          mediaUrl: data?.fileUrl ? `${BASE_URL}/Images/${data.fileUrl}` : null,
           mediaType: data?.fileType || null,
           time: new Date(data?.createdAt || Date.now()).toLocaleTimeString([], {
             hour: "2-digit",
@@ -113,7 +113,7 @@ const handleFileChange = async (e) => {
   try {
     setIsUploading(true);
     const formData = new FormData();
-    formData.append("media", selected);
+    formData.append("chatMedia", selected);
 
     const res = await callPostAPI(API_ENDPOINTS.UPLOAD_CHAT_MEDIA, formData, token, true);
     if (res?.success && res?.fileUrl) {
@@ -182,7 +182,7 @@ const sendMessage = async () => {
     id: Date.now(),
     sender: "user",
     text: message,
-    mediaUrl: file?.uploadedUrl ? `${BASE_URL}${file.uploadedUrl}` : file?.preview,
+    mediaUrl: file?.uploadedUrl ? `${BASE_URL}/Images/${file.uploadedUrl}` : file?.preview,
     mediaType: file?.uploadedType || file?.type?.split("/")[0],
     time: new Date().toLocaleTimeString([], {
       hour: "2-digit",
@@ -227,20 +227,20 @@ const sendMessage = async () => {
           <div className="chatList">
             {chatMessages.map((msg) => (
               <div
-                key={msg.id}
-                className={`chatItem ${msg.sender === "user" ? "myMessage" : "supportMessage"}`}
+                key={msg?.id}
+                className={`chatItem ${msg?.sender === "user" ? "myMessage" : "supportMessage"}`}
               >
                 <div className="ciContent">
-                  {msg.mediaType === "image" && (
-                    <img src={msg.mediaUrl} alt="chat-img" className="chat-media" />
+                  {msg?.mediaType === "image" && (
+                    <img src={msg?.mediaUrl} alt="chat-img" className="chat-media" />
                   )}
-                  {msg.mediaType === "video" && (
+                  {msg?.mediaType === "video" && (
                     <video controls className="chat-media">
-                      <source src={msg.mediaUrl} type="video/mp4" />
+                      <source src={msg?.mediaUrl} type="video/mp4" />
                     </video>
                   )}
-                  {msg.text && <p>{msg.text}</p>}
-                  <span className="ciTime">{msg.time}</span>
+                  {msg?.text && <p>{msg?.text}</p>}
+                  <span className="ciTime">{msg?.time}</span>
                 </div>
               </div>
             ))}

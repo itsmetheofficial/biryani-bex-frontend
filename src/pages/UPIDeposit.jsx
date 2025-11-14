@@ -145,7 +145,7 @@ export default function UPIDeposit() {
                   </div>
                 </div>
                 <div className="submitProof">
-                  <p>Submit Payment Proof</p>
+                  <p>Transaction ID</p>
                   <div className="spContainer">
                     <input
                       type="text"
