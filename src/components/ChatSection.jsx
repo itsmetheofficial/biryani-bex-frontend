@@ -119,7 +119,7 @@ const handleFileChange = async (e) => {
     if (res?.success && res?.fileUrl) {
       setFile((prev) => ({
         ...prev,
-        uploadedUrl: res.fileUrl,
+        uploadedUrl: `${BASE_URL}/Images/${res.fileUrl}`,
         uploadedType: res.fileType,
       }));
     } else {

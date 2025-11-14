@@ -797,6 +797,7 @@ input[type="number"] {
 }
 
 .supportMessage {
+  display: flex;
   justify-content: flex-start;
 }
 .myMessage {
@@ -5746,14 +5747,16 @@ mask-image: radial-gradient(circle, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 70%, r
 }
 
 .umCQR {
-  width: 26%;
-  min-width: 150px;
+  /* width: 26%; */
+  /* min-width: 150px; */
   margin: 0 auto;
+  width: max-content;
+  max-width: 100%;
 }
 
 .umCQR img {
   display: block;
-  width: 100%;
+  /* width: 100%; */
 }
 
 .umCBottom {

@@ -131,7 +131,7 @@ export default function DepositPage() {
             if(res?.success){
                 setupiList(res?.upiList)
                 if(res?.upiList?.length>=1){
-                    setselectedUpi(res?.upiList[0]?.upiId)
+                    setselectedUpi(res?.upiList[0])
                 }
             }else{
                 setupiList([])
@@ -241,10 +241,10 @@ export default function DepositPage() {
         } else if(paymentType==="upi"){
             if(depositAmount < depositRules?.depositMinimumAmount?.manualUpi){
                 message.error("Deposit amount should be greater than ₹"+depositRules?.depositMinimumAmount?.manualUpi)
-            }else if(!selectedUpi?.length>0){
+            }else if(!selectedUpi?.upiId?.length>0){
                 message.error("No UPI account available at this moment!");
             }else{
-                navigate(`/upi-deposit?amount=${depositAmount}&upi=${selectedUpi}`);
+                navigate(`/upi-deposit?amount=${depositAmount}&upi=${selectedUpi?.upiId}&upiname=${selectedUpi?.upiHolderName}`);
             }
         }
         else if(paymentType==="usdt"){            

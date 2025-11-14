@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { message, Spin } from 'antd';
+import { message, QRCode, Spin } from 'antd';
 import DepositSucesssModal from '../components/DepositSucesssModal';
 import { callPostAPI } from '../api/apiHelper';
 import { Cookies } from 'react-cookie';
@@ -11,6 +11,7 @@ export default function UPIDeposit() {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const amount = queryParams.get('amount');
+  const upiName = queryParams.get('upiname');
   const upi = queryParams.get('upi');
   const cookies = new Cookies();
 
@@ -95,6 +96,19 @@ export default function UPIDeposit() {
     navigate('/deposit-history');
   };
 
+   const buildUpiUrl = () => {
+    const params = new URLSearchParams({
+      pa: upi,
+      pn: upiName,
+      am: amount,
+      cu: 'INR',
+      // optionally note (tn), transaction reference (tr), etc
+    });
+    return `upi://pay?${params.toString()}`;
+  };
+
+   const qrValue = (upi && upiName && amount) ? buildUpiUrl() : '';
+
   return (
     <div className="aboutUsPage privacyPolicyPage UPIDeposit">
         {
@@ -127,13 +141,18 @@ export default function UPIDeposit() {
                   </div>
                 </div>
               </div>
-              {/* <div className="umCQRSec">
+              <div className="umCQRSec">
                 <p>ONLY DEPOSIT UPI PAYMENT ON THIS QR AND ADDRESS</p>
                 <div className="umCQR">
-                  <img src="/images/umCQr.png" alt="" />
+                  {/* <img src="/images/umCQr.png" alt="" /> */}
+                  <QRCode
+                    value={qrValue}
+                    color='#fff'
+                    // other props like color, icon, etc
+                  />
                 </div>
-              </div> */}
-              <br /> <br /> <br />
+              </div>
+              {/* <br />  */}
               <div className="umCBottom">
                 <div className="walletAddress">
                   <p>UPI Address</p>
