@@ -1,4 +1,4 @@
-import { message, Spin } from 'antd';
+import { message, QRCode, Spin } from 'antd';
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import DepositSucesssModal from '../components/DepositSucesssModal';
@@ -12,6 +12,7 @@ export default function UsdtDeposit() {
     const queryParams = new URLSearchParams(location.search);
     const amount = queryParams.get('amount');
     const usdtWalletAddress = queryParams.get('usdtWalletAddress');
+    const usdtLabel = queryParams.get('label');
     const [cookies, setCookies] = useCookies();
 
     const [showDepositSuccessVisible, setShowDepositSuccessVisible] = useState(false);
@@ -123,6 +124,9 @@ export default function UsdtDeposit() {
         navigate('/deposit-history');
     };
 
+    // const paymentURI = `tron:${usdtWalletAddress}?amount=${amount}&label=${usdtLabel}`;
+    const paymentURI = usdtWalletAddress;
+
     return (
         <div className="aboutUsPage privacyPolicyPage usdtDeposit">
             {
@@ -159,11 +163,16 @@ export default function UsdtDeposit() {
                                 </div>
                             </div>
                             <div className="umCQRSec">
-                                {/* <p>ONLY DEPOSIT TRC20 USDT ON THIS QR AND ADDRESS</p>
-                <div className="umCQR">
-                  <img src="/images/umCQr.png" alt="" />
-                </div> */}
-                            </div>
+                                <p>COPY WALLET ADDRESS WITH THIS QR CODE</p>
+                                <div className="umCQR">
+                                    {/* <img src="/images/umCQr.png" alt="" /> */}
+                                    <QRCode
+                                    value={paymentURI}
+                                    color='#fff'
+                                    // other props like color, icon, etc
+                                    />
+                                </div>
+                                </div>
                             <div className="umCBottom">
                                 <div className="walletAddress">
                                     <p>Wallet Address</p>

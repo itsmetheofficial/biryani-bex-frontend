@@ -152,7 +152,7 @@ export default function DepositPage() {
                 setusdtList(res?.usdtWalletList)
                 setusdtConversionRate(res?.usdtConversionRate)
                 if(res?.usdtWalletList?.length>=1){
-                    setselectedUsdt(res?.usdtWalletList[0]?.usdtAddress)
+                    setselectedUsdt(res?.usdtWalletList[0])
                 }
             }else{
                 setusdtList([])
@@ -250,11 +250,11 @@ export default function DepositPage() {
         else if(paymentType==="usdt"){            
              if(depositAmount < depositRules?.depositMinimumAmount?.usdt){
                 message.error("Deposit amount should be greater than ₹"+depositRules?.depositMinimumAmount?.usdt)
-            }else if(!selectedUsdt?.length>0){
+            }else if(!selectedUsdt?.usdtAddress?.length>0){
                 message.error("No USDT account available at this moment!");
             }
             else{
-                navigate(`/usdt-deposit?amount=${depositAmount}&usdtWalletAddress=${selectedUsdt}`);
+                navigate(`/usdt-deposit?amount=${depositAmount}&usdtWalletAddress=${selectedUsdt?.usdtAddress}&label=${selectedUsdt?.label}`);
             }
         }
     }
