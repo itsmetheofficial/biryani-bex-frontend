@@ -37,9 +37,11 @@ export default function UsdtDeposit() {
         const file = e.target.files[0];
         if (file) {
             if (file.type.startsWith('image/')) {
+                const previewUrl = URL.createObjectURL(file);
                 setFormData((prevState) => ({
                     ...prevState,
                     screenshotUrl: file,
+                    preview: previewUrl,
                 }));
             } else {
                 message.error('Only image files are allowed!');
@@ -184,11 +186,11 @@ export default function UsdtDeposit() {
                                     </div>
                                 </div>
                                 <div className="submitProof">
-                                    <p>Enter UTR Number</p>
+                                    <p>Hash Key</p>
                                     <div className="spContainer">
                                         <input
                                             type="text"
-                                            placeholder="Please Enter UTR Number Here"
+                                            placeholder="Please Enter Hash Key Here"
                                             value={formData.transactionId}
                                             onChange={(e) => e.target?.value?.includes(" ") ? null : setFormData({ ...formData, transactionId: e.target.value })}
                                             maxLength={12}
@@ -199,30 +201,42 @@ export default function UsdtDeposit() {
                                             }}
                                         />
 
-                                        <div>
-                                            <div className="spcButtonContainer">
-                                                <input
-                                                    type="file"
-                                                    accept="image/*"
-                                                    onChange={handleFileChange}
-                                                    id="screenshotUpload"
-                                                    style={{ display: 'none' }}
-                                                />
-                                                <button onClick={() => document.getElementById('screenshotUpload').click()}>
-                                                    <img src="/images/uploadIcon.png" alt="" />
-                                                    <span>Upload <br />Screenshot</span>
-                                                </button>
-                                            </div>
-                                            <div style={{ display: 'flex', justifyContent: 'center', color: "#fff", margin: "10px 0 0" }}>
-                                                {formData.screenshotUrl && <div>{formData.screenshotUrl.name}</div>}
-                                            </div>
-                                        </div>
+                                        
 
                                         {/* <button className="seeExampleButton">
                       <img src="/images/questionmarkIcon.png" alt="" />
                       <p>See example</p>
                     </button> */}
                                     </div>
+                                    <div>
+                                    {/* <div className="spcButtonContainer"> */}
+                                    <div className="spcButtonContainerNew">
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={handleFileChange}
+                                            id="screenshotUpload"
+                                            style={{ display: 'none' }}
+                                        />
+                                        <button onClick={() => document.getElementById('screenshotUpload').click()}>
+                                            {
+                                                formData.screenshotUrl ?
+                                                 <img
+                                                    src={formData.preview}
+                                                    alt="Screenshot Preview"
+                                                    id="screenshotPreview"
+                                                />
+
+                                                :
+                                                <img src="/images/photodemo.svg" alt="" />
+                                            }
+                                            <span>Upload Screenshot</span>
+                                        </button>
+                                    </div>
+                                    <div style={{ display: 'flex', justifyContent: 'center', color: "#fff", margin: "10px 0 0" }}>
+                                        {formData.screenshotUrl && <div>{formData.screenshotUrl.name}</div>}
+                                    </div>
+                                </div>
                                 </div>
                                 <div className="spSubmitButton">
                                     <button onClick={handleDepositRequest}>Confirm</button>

@@ -150,6 +150,7 @@ export default function UPIDeposit() {
                     color='#fff'
                     // other props like color, icon, etc
                   />
+                  <p style={{textAlign:"center",margin:0}}>{upiName}</p>
                 </div>
               </div>
               {/* <br />  */}
@@ -164,14 +165,21 @@ export default function UPIDeposit() {
                   </div>
                 </div>
                 <div className="submitProof">
-                  <p>Transaction ID</p>
+                  <p>UTR No</p>
                   <div className="spContainer">
                     <input
                       type="text"
-                      placeholder="Please Enter Transaction ID Here"
+                      placeholder="Enter UTR No"
                       value={formData.transactionId}
                       onChange={(e) => e.target.value?.includes(" ")?null: setFormData({ ...formData, transactionId: e.target.value })}
                       style={{width:"100%"}}
+                      maxLength={12}
+                       onKeyDown={(event) => {
+                        const allowedKeys = ["Backspace", "Delete", "ArrowLeft", "ArrowRight", "Tab"];
+                        if (!/[0-9]/.test(event.key) && !allowedKeys.includes(event.key)) {
+                          event.preventDefault();
+                        }
+                      }}
                     />
                     {/* <div className="spcButtonContainer">
                       <button>

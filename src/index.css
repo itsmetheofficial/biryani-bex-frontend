@@ -5823,7 +5823,7 @@ mask-image: radial-gradient(circle, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 70%, r
   border: 1px solid #717171;
   background: #26364B;
   border-radius: 100px;
-  width: 60%;
+  width: 100%;
 }
 
 .spcButtonContainer {
@@ -6407,6 +6407,27 @@ mask-image: radial-gradient(circle, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 70%, r
   border-radius: 50%;
   cursor: pointer;  
 }
+.spcButtonContainerNew button img{
+  width: 80px;
+}
+.spcButtonContainerNew button{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+  gap: 15px;
+  background: transparent;
+  border: 1px dashed #fff;
+  cursor: pointer;
+  width: 100%;
+  padding: 10px 0 15px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  margin: 25px 0;
+}
+
+
 @media (max-width: 1500px) {
   .splashPage {
     font-size: 80px;
