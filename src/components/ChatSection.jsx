@@ -83,7 +83,7 @@ export default function ChatSection({ setIsChatOpen }) {
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      disconnectSocket();
+      // disconnectSocket();
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
