@@ -65,7 +65,7 @@ export default function ChatSection({ setIsChatOpen }) {
           id: Date.now(),
           sender: "support",
           text: data?.message || "",
-          mediaUrl: data?.fileUrl ? `${BASE_URL}/Images/${data.fileUrl}` : null,
+          mediaUrl: data?.fileUrl ? `${data.fileUrl}` : null,
           mediaType: data?.fileType || null,
           time: new Date(data?.createdAt || Date.now()).toLocaleTimeString([], {
             hour: "2-digit",
@@ -119,7 +119,7 @@ const handleFileChange = async (e) => {
     if (res?.success && res?.fileUrl) {
       setFile((prev) => ({
         ...prev,
-        uploadedUrl: `${BASE_URL}/Images/${res.fileUrl}`,
+        uploadedUrl: `${res.fileUrl}`,
         uploadedType: res.fileType,
       }));
     } else {
@@ -232,11 +232,12 @@ const sendMessage = async () => {
               >
                 <div className="ciContent">
                   {msg?.mediaType === "image" && (
-                    <img src={msg?.mediaUrl} alt="chat-img" className="chat-media" />
+                    <img src={`${BASE_URL}/Images/${msg?.mediaUrl}`} alt="chat-img" className="chat-media" />
+                    // <img src={} alt="chat-img" className="chat-media" />
                   )}
                   {msg?.mediaType === "video" && (
                     <video controls className="chat-media">
-                      <source src={msg?.mediaUrl} type="video/mp4" />
+                      <source src={`${BASE_URL}/Images/${msg?.mediaUrl}`} type="video/mp4" />
                     </video>
                   )}
                   {msg?.text && <p>{msg?.text}</p>}
