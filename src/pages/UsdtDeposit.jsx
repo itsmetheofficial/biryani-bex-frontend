@@ -13,6 +13,7 @@ export default function UsdtDeposit() {
     const amount = queryParams.get('amount');
     const usdtWalletAddress = queryParams.get('usdtWalletAddress');
     const usdtLabel = queryParams.get('label');
+    const usdtNetwork = queryParams.get('network');
     const [cookies, setCookies] = useCookies();
 
     const [showDepositSuccessVisible, setShowDepositSuccessVisible] = useState(false);
@@ -166,6 +167,7 @@ export default function UsdtDeposit() {
                             </div>
                             <div className="umCQRSec">
                                 <p>COPY WALLET ADDRESS WITH THIS QR CODE</p>
+                                <p style={{marginBottom:5}}>{usdtNetwork}</p>
                                 <div className="umCQR">
                                     {/* <img src="/images/umCQr.png" alt="" /> */}
                                     <QRCode

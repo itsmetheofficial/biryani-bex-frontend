@@ -182,7 +182,7 @@ const sendMessage = async () => {
     id: Date.now(),
     sender: "user",
     text: message,
-    mediaUrl: file?.uploadedUrl ? `${BASE_URL}/Images/${file.uploadedUrl}` : file?.preview,
+    mediaUrl: file?.uploadedUrl ? `${file.uploadedUrl}` : file?.preview,
     mediaType: file?.uploadedType || file?.type?.split("/")[0],
     time: new Date().toLocaleTimeString([], {
       hour: "2-digit",

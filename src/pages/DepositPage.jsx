@@ -254,7 +254,7 @@ export default function DepositPage() {
                 message.error("No USDT account available at this moment!");
             }
             else{
-                navigate(`/usdt-deposit?amount=${depositAmount}&usdtWalletAddress=${selectedUsdt?.usdtAddress}&label=${selectedUsdt?.label}`);
+                navigate(`/usdt-deposit?amount=${depositAmount}&usdtWalletAddress=${selectedUsdt?.usdtAddress}&label=${selectedUsdt?.label}&network=${selectedUsdt?.network}`);
             }
         }
     }
